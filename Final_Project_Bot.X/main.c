@@ -35,6 +35,9 @@ int main(void) {
     LED_AddBanks(LED_BANK1 | LED_BANK2 | LED_BANK3);
 
     AD_AddPins(AD_PORTV4);
+    LED_OffBank(LED_BANK1, FULLBANK);
+    LED_OffBank(LED_BANK2, FULLBANK);
+    LED_OffBank(LED_BANK3, FULLBANK);
 
     uint16_t AD_val;
 
@@ -48,10 +51,14 @@ int main(void) {
 
         //start hysteresis
         if (AD_val >= Threshold) { //if greater than on threshold, turn leds on
-            LED_OnBank(ALL_LED_BANKS, FULLBANK);
+            LED_OnBank(LED_BANK1, FULLBANK);
+            LED_OnBank(LED_BANK2, FULLBANK);
+            LED_OnBank(LED_BANK3, FULLBANK);
             Threshold = OFF_THRESHOLD;
         } else {
-            LED_OffBank(ALL_LED_BANKS, FULLBANK);
+            LED_OffBank(LED_BANK1, FULLBANK);
+            LED_OffBank(LED_BANK2, FULLBANK);
+            LED_OffBank(LED_BANK3, FULLBANK);
             Threshold = ON_THRESHOLD;
         }
         DELAY(delaymed / 2);
