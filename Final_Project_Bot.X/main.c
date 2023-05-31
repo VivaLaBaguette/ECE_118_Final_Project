@@ -38,52 +38,17 @@ int main(void) {
     Bot_Sensor_Init();
 
 
-
     while (1) {
         
+        printf("%d\r\n", Bot_ReadRearLeftBumper());
+//        switch (Bot_Bumpers()) {
+//
+//            case FLEFT_BUMP_MASK: // Battery Voltage live output
+//                printf("Front Left Triggered \r\n");
+//                break;
+//        }
+//        DELAY(delaymed);
 
-
-
-        //        Bot_Left_Motor(BOT_MAX_SPEED);
-        //        Bot_Right_Motor(BOT_MAX_SPEED);
-        //        DELAY(delaymed * 2);
-        //
-        //        Bot_Left_Motor(0);
-        //        Bot_Right_Motor(0);
-        //        DELAY(delaymed);
-        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-        //        int AVG;
-        //
-        //        for (int i = 0; i < 100; i++) {
-        //            AD_val = AD_ReadADPin(AD_PORTV4) * 6;
-        //            AVG += AD_val;
-        //        }
-        //        printf("%d\r\n", AVG/100);
-        //        DELAY(delaymed / 2);
-        //        AVG = 0;
-
-        //        AD_val = AD_ReadADPin(AD_PORTV4);
-        //        printf("%d\r\n", AD_val);
-        //        DELAY(delaymed / 2);
-
-        //        //THIS IS FOR BEACON CHECKOFF
-        //                AD_val = AD_ReadADPin(AD_PORTV4) * 6;
-        //        
-        //                //start hysteresis
-        //                if (AD_val >= Threshold) { //if greater than on threshold, turn leds on
-        //                    LED_OnBank(LED_BANK1, FULLBANK);
-        //                    LED_OnBank(LED_BANK2, FULLBANK);
-        //                    LED_OnBank(LED_BANK3, FULLBANK);
-        //                    Threshold = OFF_THRESHOLD;
-        //                } else {
-        //                    LED_OffBank(LED_BANK1, FULLBANK);
-        //                    LED_OffBank(LED_BANK2, FULLBANK);
-        //                    LED_OffBank(LED_BANK3, FULLBANK);
-        //                    Threshold = ON_THRESHOLD;
-        //                }
-        //                DELAY(delaymed / 2);
-        //    }
     }
     while (1);
 }

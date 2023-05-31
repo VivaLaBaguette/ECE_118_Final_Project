@@ -9,4 +9,8 @@ uint8_t PostHSM(ES_Event ThisEvent);
 
 ES_Event RunHSM(ES_Event ThisEvent);
 
+void Bot_Foward(char RSpeed, char LSpeed);
+
+void Bot_Stop(void);
+
 #endif /* HSM_H */

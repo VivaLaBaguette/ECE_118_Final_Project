@@ -23,11 +23,18 @@
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Timers.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/IO_Ports.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/pwm.h</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.h</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Service.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Movement.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Sensor.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Acquire_Sub.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Bump_Sub.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Tape_Sub.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Backwards_Sub.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Bumper_Service.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/HSM.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Towards_Sub.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -51,10 +58,18 @@
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Timers.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/IO_Ports.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/pwm.c</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.c</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Service.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Movement.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Sensor.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Acquire_Sub.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Bump_Sub.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Tape_Sub.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Backwards_Sub.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Bumper_Service.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Main.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/HSM.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Towards_Sub.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -64,6 +79,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>C:\Users\seens\OneDrive\Desktop\ECE_118_Final_Project\Final_Project_Bot.X</Elem>
+    <Elem>C:\Users\seens\OneDrive\Desktop\ECE 118\Lab0\Part6BetterEvent.X</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -245,8 +261,152 @@
         <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
-      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_CheckEvents.c"
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Acquire_Sub.c"
             ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Acquire_Sub.h"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Bump_Sub.c"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Bump_Sub.h"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Tape_Sub.c"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Tape_Sub.h"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Backwards_Sub.c"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Backwards_Sub.h"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_CheckEvents.c"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -264,25 +424,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_CheckEvents.h"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-CO>
-        </C32-CO>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -300,7 +442,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Events.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -318,7 +460,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Framework.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -336,7 +478,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Framework.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -354,7 +496,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_General.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -372,7 +514,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_KeyboardInput.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -390,7 +532,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_KeyboardInput.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -408,7 +550,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_LookupTables.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -426,7 +568,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Port.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -444,7 +586,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_PostList.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -462,7 +604,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_PostList.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -480,7 +622,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_PriorTables.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -498,7 +640,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Queue.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -516,7 +658,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Queue.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -534,7 +676,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_ServiceHeaders.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -552,7 +694,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_TattleTale.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -570,7 +712,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_TattleTale.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -588,7 +730,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Timers.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -606,7 +748,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Timers.h"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -624,7 +766,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -641,8 +783,26 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.h"
-            ex="true"
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/HSM.c"
+            ex="false"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/HSM.h"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -660,7 +820,7 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/IO_Ports.c"
-            ex="true"
+            ex="false"
             overriding="false">
         <C32>
         </C32>
@@ -678,6 +838,24 @@
         </C32Global>
       </item>
       <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/IO_Ports.h"
+            ex="false"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.c"
             ex="true"
             overriding="false">
         <C32>
@@ -695,7 +873,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Service.c"
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.h"
             ex="true"
             overriding="false">
         <C32>
@@ -713,7 +891,43 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Service.h"
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Towards_Sub.c"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Towards_Sub.h"
+            ex="true"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
+      <item path="C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/main.c"
             ex="true"
             overriding="false">
         <C32>

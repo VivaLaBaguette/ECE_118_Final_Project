@@ -11,7 +11,6 @@
 #include <sys/attribs.h> //needed to use an interrupt
 
 
-
 #include <serial.h>
 
 #include <stdio.h>
