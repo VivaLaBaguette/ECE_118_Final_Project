@@ -9,6 +9,16 @@
 
 uint8_t Beacon_2k(void);
 
-uint8_t Beacon_1_5k(void);
+uint8_t Beacon_15k(void);
+
+uint8_t Tape_Front_Right(void);
+
+uint8_t Tape_Front_Center(void);
+
+uint8_t Tape_Front_Left(void);
+
+uint8_t Tape_Back_Right(void);
+
+uint8_t Tape_Back_Left(void);
 
 #endif

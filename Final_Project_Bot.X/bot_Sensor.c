@@ -35,20 +35,23 @@ void Bot_Sensor_Init(void) {
     AD_Init();
     AD_AddPins(TAPE_BACK_LEFT | TAPE_BACK_RIGHT | TAPE_FRONT_CENTER | TAPE_FRONT_LEFT | TAPE_FRONT_RIGHT);
 
-    AD_AddPins(BEACON_15KHZ | BEACON_2KHZ);
+    AD_AddPins(BEACON_2KHZ | BEACON_15KHZ);
 }
 
 //returns 10 bit 2kHz Beacon 0 - 1023
-uint16_t Bot_2_Beacon(void){
+
+unsigned int Bot_2_Beacon(void) {
     return AD_ReadADPin(BEACON_2KHZ);
 }
 
 //returns 10 bit 1.5kHz Beacon 0 - 1023
-uint16_t Bot_15_Beacon(void){
+
+unsigned int Bot_15_Beacon(void) {
     return AD_ReadADPin(BEACON_15KHZ);
 }
 
 //read battery voltage
+
 unsigned int Bot_Battery(void) {
 
 }
@@ -56,28 +59,27 @@ unsigned int Bot_Battery(void) {
 
 //reads tape sensor
 
-unsigned char Bot_Tape_Sensors(void) {
-
+unsigned int Read_Tape_Front_Right(void) {
+    return AD_ReadADPin(TAPE_FRONT_RIGHT);
 }
 
+unsigned int Read_Tape_Front_Center(void) {
+    return AD_ReadADPin(TAPE_FRONT_CENTER);
+}
+
+unsigned int Read_Tape_Front_Left(void) {
+    return AD_ReadADPin(TAPE_FRONT_LEFT);
+}
+
+unsigned int Read_Tape_Back_Right(void) {
+    return AD_ReadADPin(TAPE_BACK_RIGHT);
+}
+
+unsigned int Read_Tape_Back_Left(void) {
+    return AD_ReadADPin(TAPE_BACK_LEFT);
+}
 
 //BUMPER STUFF
-
-unsigned char Bot_ReadFrontLeftBumper(void) {
-    return HALL_FRONT_LEFT;
-}
-
-unsigned char Bot_ReadFrontRightBumper(void) {
-    return HALL_FRONT_RIGHT;
-}
-
-unsigned char Bot_ReadRearLeftBumper(void) {
-    return HALL_REAR_LEFT;
-}
-
-unsigned char Bot_ReadRearRightBumper(void) {
-    return HALL_REAR_RIGHT;
-}
 
 //reads bumper state
 // FL, FR, BL, BR

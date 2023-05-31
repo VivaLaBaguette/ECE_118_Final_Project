@@ -19,20 +19,25 @@ unsigned int Bot_Battery(void);
 unsigned char Bot_Tape_Sensors(void);
 
 //returns 10 bit 2kHz Beacon 0 - 1023
-uint16_t Bot_2_Beacon(void);
+unsigned int Bot_2_Beacon(void);
 
 //returns 10 bit 1.5kHz Beacon 0 - 1023
-uint16_t Bot_15_Beacon(void);
+unsigned int Bot_15_Beacon(void);
+
+//Tape sensors
+//returns their ad value to be dealt with in event checker
+unsigned int Read_Tape_Front_Right(void);
+
+unsigned int Read_Tape_Front_Center(void);
+
+unsigned int Read_Tape_Front_Left(void);
+
+unsigned int Read_Tape_Back_Right(void);
+
+unsigned int Read_Tape_Back_Left(void);
+
 
 //BUMPER FUNCTIONS
-unsigned char Bot_ReadFrontLeftBumper(void);
-
-unsigned char Bot_ReadFrontRightBumper(void);
-
-unsigned char Bot_ReadRearLeftBumper(void);
-
-unsigned char Bot_ReadRearRightBumper(void);
-
 unsigned char Bot_Bumpers(void);
 
 

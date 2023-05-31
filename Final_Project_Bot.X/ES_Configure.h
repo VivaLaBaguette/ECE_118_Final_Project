@@ -59,6 +59,8 @@ typedef enum {
     //BEACON FUNCTIONS
     DETECTED_2KHZ,
     NOT_DETECTED_2KHZ,
+    DETECTED_15KHZ,
+    NOT_DETECTED_15KHZ,
 
     NO_BUMPER_TRIPPED,
     BOTH_FRONT_TRIPPED,
@@ -72,6 +74,19 @@ typedef enum {
     BOTHREARRFRONT,
     FLEFTRRIGHT,
     FRIGHTRLEFT,
+
+    //time for tape events
+    TAPE_FRONT_RIGHT_DETECTED,
+    TAPE_FRONT_CENTER_DETECTED,
+    TAPE_FRONT_LEFT_DETECTED,
+    TAPE_BACK_RIGHT_DETECTED,
+    TAPE_BACK_LEFT_DETECTED,
+
+    TAPE_FRONT_RIGHT_NOT_DETECTED,
+    TAPE_FRONT_CENTER_NOT_DETECTED,
+    TAPE_FRONT_LEFT_NOT_DETECTED,
+    TAPE_BACK_RIGHT_NOT_DETECTED,
+    TAPE_BACK_LEFT_NOT_DETECTED,
 } ES_EventTyp_t;
 
 static const char *EventNames[] = {
@@ -96,8 +111,10 @@ static const char *EventNames[] = {
     "BACKRIGHT_NOT_TRIPPED",
     "BACKLEFT_TRIPPED",
     "BACKLEFT_NOT_TRIPPED",
-    "DETECTED_2KHZ"",
+    "DETECTED_2KHZ",
     "NOT_DETECTED_2KHZ",
+    "DETECTED_15KHZ",
+    "NOT_DETECTED_15KHZ",
     "NO_BUMPER_TRIPPED",
     "BOTH_FRONT_TRIPPED",
     "BOTH_REAR_TRIPPED",
@@ -110,6 +127,18 @@ static const char *EventNames[] = {
     "BOTHREARRFRONT",
     "FLEFTRRIGHT",
     "FRIGHTRLEFT",
+
+    "TAPE_FRONT_RIGHT_DETECTED",
+    "TAPE_FRONT_CENTER_DETECTED",
+    "TAPE_FRONT_LEFT_DETECTED",
+    "TAPE_BACK_RIGHT_DETECTED",
+    "TAPE_BACK_LEFT_DETECTED",
+
+    "TAPE_FRONT_RIGHT_NOT_DETECTED",
+    "TAPE_FRONT_CENTER_NOT_DETECTED",
+    "TAPE_FRONT_LEFT_NOT_DETECTED",
+    "TAPE_BACK_RIGHT_NOT_DETECTED",
+    "TAPE_BACK_LEFT_NOT_DETECTED",
 };
 
 
@@ -121,7 +150,7 @@ static const char *EventNames[] = {
 
 /****************************************************************************/
 // This is the list of event checking functions
-#define EVENT_CHECK_LIST  Beacon_2k
+#define EVENT_CHECK_LIST  Beacon_2k, Beacon_15k, Tape_Front_Right, Tape_Front_Center, Tape_Front_Left, Tape_Back_Right, Tape_Back_Left,
 
 /****************************************************************************/
 // These are the definitions for the post functions to be executed when the
