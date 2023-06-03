@@ -47,6 +47,8 @@ typedef enum {
     BATTERY_CONNECTED,
     BATTERY_DISCONNECTED,
     NUMBEROFEVENTS,
+
+    //BUMPER EVENTS
     FRONTRIGHT_TRIPPED,
     FRONTRIGHT_NOT_TRIPPED,
     FRONTLEFT_TRIPPED,
@@ -65,15 +67,6 @@ typedef enum {
     NO_BUMPER_TRIPPED,
     BOTH_FRONT_TRIPPED,
     BOTH_REAR_TRIPPED,
-    BOTH_LEFT_TRIPPED,
-    BOTH_RIGHT_TRIPPED,
-    ALL_TRIPPED,
-    BOTHFRONTRBACK,
-    BOTHFRONTLBACK,
-    BOTHREARLFRONT,
-    BOTHREARRFRONT,
-    FLEFTRRIGHT,
-    FRIGHTRLEFT,
 
     //time for tape events
     TAPE_FRONT_RIGHT_DETECTED,
@@ -87,6 +80,12 @@ typedef enum {
     TAPE_FRONT_LEFT_NOT_DETECTED,
     TAPE_BACK_RIGHT_NOT_DETECTED,
     TAPE_BACK_LEFT_NOT_DETECTED,
+
+    //HSM SPECIFIC EVENTS
+    ACQUIRED_2KHZ,
+    FINISHED_POSITIONING,
+    FINISHED_NAVIGATION,
+    FINISHED_SHOOTING,
 } ES_EventTyp_t;
 
 static const char *EventNames[] = {
@@ -118,15 +117,6 @@ static const char *EventNames[] = {
     "NO_BUMPER_TRIPPED",
     "BOTH_FRONT_TRIPPED",
     "BOTH_REAR_TRIPPED",
-    "BOTH_LEFT_TRIPPED",
-    "BOTH_RIGHT_TRIPPED",
-    "ALL_TRIPPED",
-    "BOTHFRONTRBACK",
-    "BOTHFRONTLBACK",
-    "BOTHREARLFRONT",
-    "BOTHREARRFRONT",
-    "FLEFTRRIGHT",
-    "FRIGHTRLEFT",
 
     "TAPE_FRONT_RIGHT_DETECTED",
     "TAPE_FRONT_CENTER_DETECTED",
@@ -139,6 +129,11 @@ static const char *EventNames[] = {
     "TAPE_FRONT_LEFT_NOT_DETECTED",
     "TAPE_BACK_RIGHT_NOT_DETECTED",
     "TAPE_BACK_LEFT_NOT_DETECTED",
+
+    "ACQUIRED_2KHZ",
+    "FINISHED_POSITIONING",
+    "FINISHED_NAVIGATION",
+    "FINISHED_SHOOTING",
 };
 
 
@@ -158,9 +153,9 @@ static const char *EventNames[] = {
 // a timers, then you can use TIMER_UNUSED
 #define TIMER_UNUSED ((pPostFunc)0)
 #define TIMER0_RESP_FUNC PostBumper
-#define TIMER1_RESP_FUNC TIMER_UNUSED
-#define TIMER2_RESP_FUNC TIMER_UNUSED
-#define TIMER3_RESP_FUNC TIMER_UNUSED
+#define TIMER1_RESP_FUNC PostHSM
+#define TIMER2_RESP_FUNC PostHSM
+#define TIMER3_RESP_FUNC PostHSM
 #define TIMER4_RESP_FUNC TIMER_UNUSED
 #define TIMER5_RESP_FUNC TIMER_UNUSED
 #define TIMER6_RESP_FUNC TIMER_UNUSED
@@ -183,7 +178,9 @@ static const char *EventNames[] = {
 
 #define GENERIC_NAMED_TIMER 0 /*make sure this is enabled above and posting to the correct state machine*/
 #define SIMPLE_SERVICE_TIMER 0
-
+#define RELOADING_TIMER 1
+#define POSITIONING_TIMER 2
+#define SHOOTING_TIMER 3
 /****************************************************************************/
 // The maximum number of services sets an upper bound on the number of 
 // services that the framework will handle. Reasonable values are 8 and 16

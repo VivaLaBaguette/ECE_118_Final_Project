@@ -6,7 +6,6 @@
 
 uint8_t InitAcquireSubHSM(void);
 
-
 ES_Event RunAcquireSubHSM(ES_Event ThisEvent);
 
 #endif

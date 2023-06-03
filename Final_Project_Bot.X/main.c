@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "xc.h"
+#include "Event_Checker.h"
 
 
 #define DELAY(x)    for (unsigned int wait = 0; wait <= x; wait++) {asm("nop");}
@@ -39,15 +40,15 @@ int main(void) {
 
 
     while (1) {
-        
-        printf("%d\r\n", Read_Tape_Back_Right());
-//        switch (Bot_Bumpers()) {
-//
-//            case FLEFT_BUMP_MASK: // Battery Voltage live output
-//                printf("Front Left Triggered \r\n");
-//                break;
-//        }
-//        DELAY(delaymed);
+        printf("%d\r\n", Read_Tape_Front_Left());
+
+        //        switch (Bot_Bumpers()) {
+        //
+        //            case FLEFT_BUMP_MASK: // Battery Voltage live output
+        //                printf("Front Left Triggered \r\n");
+        //                break;
+        //        }
+        //        DELAY(delaymed);
 
     }
     while (1);

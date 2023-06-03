@@ -9,7 +9,7 @@
 #include "bot_Sensor.h"
 #include "HSM.h"
 
-#define TIMER_0_TICKS 25
+#define TIMER_0_TICKS 50
 
 #define FLEFT_BUMP_MASK (1)
 #define FRIGHT_BUMP_MASK (1<<1)
@@ -18,19 +18,9 @@
 //#define NO_BUMPER_TRIPPED 0x00
 #define BothFrontBump 0x03
 #define BothRearBump 0x0C
-#define BothRightBump 0x0A
-#define BothLeftBump 0x05
-#define AllTripped   0x0f
-#define BothFrontRLeft 0x07
-#define BothFrontRRight 0x0b
-#define BothRearFLeft 0x0d
-#define BothRearFRight 0x0e
-#define FLRR 0x09
-#define FRRL 0x06
 
 
 static uint8_t MyPriority;
-
 
 uint8_t InitBumper(uint8_t Priority) {
     ES_Event ThisEvent;
@@ -46,11 +36,9 @@ uint8_t InitBumper(uint8_t Priority) {
     }
 }
 
-
 uint8_t PostBumper(ES_Event ThisEvent) {
     return ES_PostToService(MyPriority, ThisEvent);
 }
-
 
 ES_Event RunBumper(ES_Event ThisEvent) {
     ES_Event ReturnEvent;
@@ -66,7 +54,7 @@ ES_Event RunBumper(ES_Event ThisEvent) {
             //
             // This section is used to reset service for some reason
             break;
-            
+
         case ES_TIMERACTIVE:
         case ES_TIMERSTOPPED:
             break;
@@ -108,29 +96,6 @@ ES_Event RunBumper(ES_Event ThisEvent) {
                 curEvent = BOTH_REAR_TRIPPED;
 
                 // both left tripped
-            } else if (Bot_Bumpers() == BothLeftBump) {
-
-                curEvent = BOTH_LEFT_TRIPPED;
-
-                // both right tripped
-            } else if (Bot_Bumpers() == BothRightBump) {
-
-                curEvent = BOTH_RIGHT_TRIPPED;
-
-            } else if (Bot_Bumpers() == AllTripped) {
-                curEvent = ALL_TRIPPED;
-            } else if (Bot_Bumpers() == BothFrontRLeft) {
-                curEvent = BOTHFRONTLBACK;
-            } else if (Bot_Bumpers() == BothFrontRRight) {
-                curEvent = BOTHFRONTRBACK;
-            } else if (Bot_Bumpers() == BothRearFRight) {
-                curEvent = BOTHREARRFRONT;
-            } else if (Bot_Bumpers() == BothRearFLeft) {
-                curEvent = BOTHREARLFRONT;
-            }else if (Bot_Bumpers() == FRRL) {
-                curEvent = FRIGHTRLEFT;
-            }else if (Bot_Bumpers() == FLRR) {
-                curEvent = FLEFTRRIGHT;
             }
 
 
@@ -139,7 +104,7 @@ ES_Event RunBumper(ES_Event ThisEvent) {
                 ReturnEvent.EventType = curEvent;
                 ReturnEvent.EventParam = BUMPER_TRIPPED;
                 lastEvent = curEvent; // update history
-                
+
 #ifndef SIMPLESERVICE_TEST           // keep this as is for test harness
                 PostHSM(ReturnEvent);
 #else
@@ -147,7 +112,7 @@ ES_Event RunBumper(ES_Event ThisEvent) {
 #endif   
             }
             break;
-            
+
 #ifdef SIMPLESERVICE_TEST     // keep this as is for test harness      
         default:
             printf("\r\nEvent: %s\tParam: 0x%X",

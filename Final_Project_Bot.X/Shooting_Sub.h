@@ -6,7 +6,6 @@
 
 uint8_t InitShootingSubHSM(void);
 
-
 ES_Event RunShootingSubHSM(ES_Event ThisEvent);
 
 #endif

@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AD.h</file>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Sensor.c</file>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.h</file>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Event_Checker.c</file>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AD.c</file>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Sensor.h</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/HSM.c</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.c</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Movement.h</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Towards_Sub.c</file>
             <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/HSM.h</file>
         </group>
     </open-files>
 </project-private>

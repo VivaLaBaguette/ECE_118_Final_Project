@@ -4,15 +4,16 @@
 #include "BOARD.h"
 #include "HSM.h"
 #include "bot_Movement.h"
+#include "Towards_Sub.h"
+#include "Shooting_Sub.h"
+
+#include <stdio.h>
 
 //sub state machines
 //#include "Backwards_Sub.h"
 //#include "Shooting_Sub.h"
 //#include "Towards_Sub.h"
 //#include "bot_Sensor.h"
-
-#define DELAY(x)    for (unsigned int wait = 0; wait <= x; wait++) {asm("nop");}
-#define delaymed  1830000
 
 typedef enum {
     Init_State,
@@ -62,6 +63,11 @@ ES_Event RunHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_INIT) {
                 // Initialize all sub-state machines
                 //                InitSubHSM();
+                InitTowardsSubHSM();
+                InitShootingSubHSM();
+
+                //ADD MORE SUB STATE MACHINES!!!!!!!!!!!!!!!!!!!!
+
 
                 // now put the machine into the actual initial state
 
@@ -70,17 +76,22 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                 ThisEvent.EventType = ES_NO_EVENT;
                 ;
             }
+
+            //RELOADING STATE JUST WAITS FOR TIMER AND MOVES ON
         case Reloading_State:
             if (ThisEvent.EventType != ES_NO_EVENT) {
                 switch (ThisEvent.EventType) {
                     case ES_ENTRY:
-                        Bot_Foward(BOT_MAX_SPEED, -BOT_MAX_SPEED);
-                        break;
-                    case ES_EXIT:
+                        //start timer
+                        ES_Timer_InitTimer(RELOADING_TIMER, TIMER_RELOAD_TICK);
                         Bot_Stop();
                         break;
 
-                    case BACKLEFT_TRIPPED:
+                    case ES_EXIT: //when exiting the state, stop
+                        Bot_Stop();
+                        break;
+
+                    case ES_TIMEOUT: //timeout, go to drive towrads state
                         nextState = Drive_Towards_State;
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
@@ -93,24 +104,82 @@ ES_Event RunHSM(ES_Event ThisEvent) {
             }
             break;
 
+            //DRIVE TOWARDS SUB STATE MACHINE
+        case Drive_Towards_State:
 
-        case Drive_Towards_State: // in the first state, replace this with correct names
+            ThisEvent = RunTowardsSubHSM(ThisEvent);
+
             if (ThisEvent.EventType != ES_NO_EVENT) {
                 switch (ThisEvent.EventType) {
                     case ES_ENTRY:
-                        Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SPEED);
+                        printf("\r\nDriving the thing \r\n");
                         break;
                     case ES_EXIT:
                         Bot_Stop();
-                        
                         break;
-
-                    case FRONTRIGHT_TRIPPED:
-                        nextState = Reloading_State;
+                    case FINISHED_NAVIGATION:
+                        nextState = Shooting_State;
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
                         break;
 
+                    case ES_NO_EVENT:
+                    default:
+                        break;
+                }
+            }
+
+            break;
+        case Shooting_State:
+
+            ThisEvent = RunShootingSubHSM(ThisEvent);
+
+            if (ThisEvent.EventType != ES_NO_EVENT) {
+                switch (ThisEvent.EventType) {
+                    case ES_ENTRY:
+                        printf("Shooting the thing");
+                        break;
+                    case ES_EXIT:
+                        Bot_Stop();
+                        break;
+
+                    case FINISHED_SHOOTING: // change to finshed shooting or smthing
+                        nextState = Drive_Backwards_State;
+                        makeTransition = TRUE;
+                        ThisEvent.EventType = ES_NO_EVENT;
+                        break;
+
+                    case ES_NO_EVENT:
+                    default:
+                        break;
+                }
+            }
+
+            break;
+            
+        case Drive_Backwards_State:
+
+            if (ThisEvent.EventType != ES_NO_EVENT) {
+                switch (ThisEvent.EventType) {
+                    case ES_ENTRY:
+                        printf("Doing the backwards the thing");
+                        break;
+                    case ES_EXIT:
+                        Bot_Stop();
+                        break;
+
+                    case BACKLEFT_TRIPPED:
+                        nextState = Reloading_State;
+                        makeTransition = TRUE;
+                        ThisEvent.EventType = ES_NO_EVENT;
+                        
+                        break;
+                    case BACKRIGHT_TRIPPED:
+                        nextState = Reloading_State;
+                        makeTransition = TRUE;
+                        ThisEvent.EventType = ES_NO_EVENT;
+                        
+                        break;
 
                     case ES_NO_EVENT:
                     default:
@@ -122,12 +191,9 @@ ES_Event RunHSM(ES_Event ThisEvent) {
 
 
 
-
         default: // all unhandled states fall into here
             break;
     } // end switch on Current State
-
-
 
 
     if (makeTransition == TRUE) { // making a state transition, send EXIT and ENTRY
@@ -141,7 +207,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
     return ThisEvent;
 }
 
-void Bot_Foward(char RSpeed, char LSpeed) {
+void Bot_Foward(char LSpeed, char RSpeed) {
     Bot_Left_Motor(LSpeed);
     Bot_Right_Motor(RSpeed);
 }
