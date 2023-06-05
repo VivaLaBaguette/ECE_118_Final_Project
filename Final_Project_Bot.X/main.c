@@ -38,7 +38,7 @@ int main(void) {
 
     while (1) {
         DELAY(delaymed);
-        printf("\r\n%d\r\n", Bot_Side());
+        Bot_Loader(BOT_SLOW_SPEED);
 //        switch (Bot_Bumpers()) {
 //
 //            case FLEFT_BUMP_MASK: // Battery Voltage live output

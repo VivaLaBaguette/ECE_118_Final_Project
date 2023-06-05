@@ -11,14 +11,15 @@
 #define TIMER_SHOOT_POSITIONING_TICK (600)
 #define TIMER_SHOOTING_TICK (2000)
 #define TIMER_ACQUIRING_TICK (165)
-#define TIMER_90DEGREE_TICK (750)
-#define TIMER_BACKUP_TICK (300)
+#define TIMER_90DEGREE_TICK (730)
+#define TIMER_BACKUP_TICK (400)
 
 
 #define LEFT_SIDE 0
 #define RIGHT_SIDE 1
 
 extern unsigned int Global_Side;
+extern unsigned int Original_Side;
 
 uint8_t InitHSM(uint8_t Priority);
 

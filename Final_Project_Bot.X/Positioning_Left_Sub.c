@@ -51,7 +51,7 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
         case InitState: // If current state is initial Psedudo State
             if (ThisEvent.EventType == ES_INIT)// only respond to ES_Init
             {
-                ES_Timer_InitTimer(POSITIONING_TIMER, TIMER_POSITIONING_TICK);
+                ES_Timer_InitTimer(POSITIONING_TIMER, TIMER_90DEGREE_TICK);
                 nextState = Turn90LeftState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -163,8 +163,8 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
 
         case BackUpState: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(POSITIONING_TIMER, TIMER_BACKUP_TICK);
-                Bot_Foward(-BOT_HALF_SPEED, -BOT_HALF_SPEED);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 200);
+                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
 
             if (ThisEvent.EventType == ES_EXIT) {
@@ -184,8 +184,8 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
         case TurnBackState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(ACQUIRE_TIMER, TIMER_90DEGREE_TICK);
-                Bot_Foward(BOT_HALF_SPEED, -BOT_HALF_SPEED);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, 600);
+                Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
 
             if (ThisEvent.EventType == ES_EXIT) {

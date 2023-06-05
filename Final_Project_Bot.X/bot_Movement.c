@@ -24,7 +24,6 @@
 #define RIGHT_DIR_TRIS _TRISD11
 #define RIGHT_DIR_INV_TRIS _TRISD5
 
-
 #define SHOOTER_PWM PWM_PORTZ06	//Left Motor Speed Control
 #define LOADER_PWM PWM_PORTX11	//Right Motor Speed Control
 

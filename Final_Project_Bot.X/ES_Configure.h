@@ -86,6 +86,8 @@ typedef enum {
     FINISHED_POSITIONING,
     FINISHED_NAVIGATION,
     FINISHED_SHOOTING,
+    FINISHED_AVOIDING,
+    FINISHED_OBSTACLE,
 } ES_EventTyp_t;
 
 static const char *EventNames[] = {
@@ -134,6 +136,8 @@ static const char *EventNames[] = {
     "FINISHED_POSITIONING",
     "FINISHED_NAVIGATION",
     "FINISHED_SHOOTING",
+    "FINISHED_AVOIDING",
+    "FINISHED_OBSTACLE",
 };
 
 
@@ -158,7 +162,7 @@ static const char *EventNames[] = {
 #define TIMER3_RESP_FUNC PostHSM
 #define TIMER4_RESP_FUNC PostHSM
 #define TIMER5_RESP_FUNC PostHSM
-#define TIMER6_RESP_FUNC TIMER_UNUSED
+#define TIMER6_RESP_FUNC PostHSM
 #define TIMER7_RESP_FUNC TIMER_UNUSED
 #define TIMER8_RESP_FUNC TIMER_UNUSED
 #define TIMER9_RESP_FUNC TIMER_UNUSED
@@ -183,6 +187,7 @@ static const char *EventNames[] = {
 #define SHOOTING_TIMER 3
 #define SHOOTING_TIMERTWOO 4
 #define ACQUIRE_TIMER 5
+#define AVOID_TIMER 6
 /****************************************************************************/
 // The maximum number of services sets an upper bound on the number of 
 // services that the framework will handle. Reasonable values are 8 and 16

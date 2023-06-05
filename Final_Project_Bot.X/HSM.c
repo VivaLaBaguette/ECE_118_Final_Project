@@ -42,6 +42,7 @@ uint8_t InitHSM(uint8_t Priority) {
     // put us into the Initial PseudoState
     CurrentState = Init_State;
     Global_Side = Bot_Side();
+    Original_Side = Global_Side;
     // post the initial transition event
     if (ES_PostToService(MyPriority, INIT_EVENT) == TRUE) {
         return TRUE;
@@ -65,9 +66,6 @@ ES_Event RunHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_INIT) {
                 // Initialize all sub-state machines
                 //                InitSubHSM();
-                InitTowardsSubHSM();
-                InitShootingSubHSM();
-
                 //ADD MORE SUB STATE MACHINES!!!!!!!!!!!!!!!!!!!!
 
 
@@ -91,6 +89,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         break;
 
                     case ES_EXIT: //when exiting the state, stop
+                        InitTowardsSubHSM();
                         Bot_Stop();
                         break;
 
@@ -119,6 +118,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         break;
                     case ES_EXIT:
                         Bot_Stop();
+                        InitShootingSubHSM();
                         break;
                     case FINISHED_NAVIGATION:
                         nextState = Shooting_State;
@@ -174,17 +174,17 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         Bot_Stop();
                         break;
 
-                    case BACKLEFT_TRIPPED:
-                        nextState = Reloading_State;
-                        makeTransition = TRUE;
-                        ThisEvent.EventType = ES_NO_EVENT;
-                        break;
-
-                    case BACKRIGHT_TRIPPED:
-                        nextState = Reloading_State;
-                        makeTransition = TRUE;
-                        ThisEvent.EventType = ES_NO_EVENT;
-                        break;
+//                    case BACKLEFT_TRIPPED:
+//                        nextState = Reloading_State;
+//                        makeTransition = TRUE;
+//                        ThisEvent.EventType = ES_NO_EVENT;
+//                        break;
+//
+//                    case BACKRIGHT_TRIPPED:
+//                        nextState = Reloading_State;
+//                        makeTransition = TRUE;
+//                        ThisEvent.EventType = ES_NO_EVENT;
+//                        break;
 
                     case BOTH_REAR_TRIPPED:
                         nextState = Reloading_State;

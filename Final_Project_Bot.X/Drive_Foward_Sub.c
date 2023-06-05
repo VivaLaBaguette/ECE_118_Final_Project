@@ -65,7 +65,12 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive1: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
+                } else {
+                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                }
+                
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -84,7 +89,11 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive2: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
+                } else {
+                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -104,7 +113,11 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive3: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
+                } else {
+                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -123,7 +136,11 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive4: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
+                } else {
+                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -142,7 +159,11 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive5: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
+                } else {
+                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -161,7 +182,11 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive6: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
+                } else {
+                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -180,7 +205,11 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive7: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
+                } else {
+                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();

@@ -8,7 +8,9 @@
 #include "bot_Movement.h"
 #include "Positioning_Left_Sub.h"
 #include "Positioning_Right_Sub.h"
-#include "Avoid_Bump_Sub.h"
+//#include "Avoid_Bump_Right_Sub.h"
+//#include "Avoid_Bump_Left_Sub.h"
+#include "AvoidLeftWallSub.h"
 
 #include <stdio.h>
 
@@ -17,8 +19,8 @@ typedef enum {
     AcquireBeaconState,
     PositionState,
     DriveFowardState,
-    AvoidTapeState,
-    AvoidBumpState,
+    AvoidWallState,
+    AvoidObstacleState,
 
 } TowardsSubHSMState_t;
 
@@ -27,8 +29,8 @@ static const char *StateNames[] = {
     "AcquireBeaconState",
     "PositionState",
     "DriveFowardState",
-    "AvoidTapeState",
-    "AvoidBumpState",
+    "AvoidWallState",
+    "AvoidObstacleState",
 };
 
 static TowardsSubHSMState_t CurrentState = InitSubState; // <- change name to match ENUM
@@ -89,7 +91,7 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             break;
 
         case PositionState: //back up until both back bumpers are tripped
-
+            
             if (Global_Side == LEFT_SIDE) {
                 ThisEvent = RunPositioningLeftSubHSM(ThisEvent);
             } else {
@@ -98,9 +100,11 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
             if (ThisEvent.EventType == ES_ENTRY) {
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
+
             //once both bumpers are tripped, continue back with blocking code for just a bit
             if (ThisEvent.EventType == FINISHED_POSITIONING) {
                 //then drive foward
@@ -118,22 +122,70 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             ThisEvent = RunDriveFowardSubHSM(ThisEvent);
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                ;
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == FRONTRIGHT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED){
-                nextState = AvoidBumpState;
+
+            if (ThisEvent.EventType == FRONTLEFT_TRIPPED && Global_Side == LEFT_SIDE) {
+                InitAvoidLeftWallSubHSM();
+                nextState = AvoidWallState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
+                break;
             }
+
+            if (ThisEvent.EventType == FRONTRIGHT_TRIPPED && Global_Side == RIGHT_SIDE) {
+                //AVOID RIGHT SIDE WALL SUB HSM
+                //                InitAvoidRightWallSubHSM();
+                //                nextState = AvoidWallState;
+                //                makeTransition = TRUE;
+                //                ThisEvent.EventType = ES_NO_EVENT;
+                //                break;
+            }
+
+            //if on the right side and either front left or both are tripped, there is an obstacle
+            if ((ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == RIGHT_SIDE) {
+                //InitObstacleLeftSubHSM();
+            }
+            //if on the left side and either front right or both are tripped, there is an obstacle
+            if ((ThisEvent.EventType == FRONTRIGHT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == LEFT_SIDE) {
+
+            }
+
+
             if (ThisEvent.EventType == FINISHED_NAVIGATION) { //so if towards is done and finished navigating, transition top level to shooting
                 makeTransition = FALSE;
                 ThisEvent.EventType = FINISHED_NAVIGATION;
                 break;
             }
-            //SO EVENTS NEED TO BE CHECKED HERE, FINISHED NAVIGATING, BUMP, AVOID TAPE
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+
+        case AvoidWallState: //back up until both back bumpers are tripped
+            if (Global_Side == LEFT_SIDE) {
+                ThisEvent = RunAvoidLeftWallSubHSM(ThisEvent);
+            } else {
+                //run the avoid right side wall
+                //                ThisEvent = RunAvoidLeftWallSubHSM(ThisEvent);
+            }
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+
+            if (ThisEvent.EventType == FINISHED_AVOIDING) {
+                nextState = DriveFowardState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+            }
             if (ThisEvent.EventType == ES_NO_EVENT) {
                 break;
             }
@@ -141,17 +193,17 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
 
             ///DO THIS CASE LATER, FOR AVOIDING OBSTACLES
-        case AvoidBumpState: //back up until both back bumpers are tripped
-            
-            ThisEvent = RunAvoid_BumpSubHSM();
-                    
+        case AvoidObstacleState: //back up until both back bumpers are tripped
+
+
+
             if (ThisEvent.EventType == ES_ENTRY) {
                 Bot_Stop();
             }
             if (ThisEvent.EventType == ES_EXIT) {
             }
 
-            if (ThisEvent.EventType == FINISHED_AVOIDING){
+            if (ThisEvent.EventType == FINISHED_AVOIDING) {
                 nextState = DriveFowardState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
