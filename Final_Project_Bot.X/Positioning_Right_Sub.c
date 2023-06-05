@@ -2,42 +2,37 @@
 #include "ES_Framework.h"
 #include "BOARD.h"
 #include "HSM.h"
-#include "Drive_Foward_Sub.h"
+#include "Positioning_Right_Sub.h"
 #include "bot_Movement.h"
 
 typedef enum {
     InitState,
-    Drive1,
-    Drive2,
-    Drive3,
-    Drive4,
-    Drive5,
-    Drive6,
-    Drive7,
-
-} DriveFowardSubHSMState_t;
+    Turn90RightState,
+    ForwardState,
+    RightTrippedState,
+    LeftTrippedState,
+    BackUpState,
+    TurnBackState,
+} PositioningRightSubHSMState_t;
 
 static const char *StateNames[] = {
     "InitState",
-    "Drive1",
-    "Drive2",
-    "Drive3",
-    "Drive4",
-    "Drive5",
-    "Drive6",
-    "Drive7",
+    "Turn90RightState",
+    "ForwardState",
+    "RightTrippedState",
+    "LeftTrippedState",
+    "BackUpState",
+    "TurnBackState",
 };
 
-static DriveFowardSubHSMState_t CurrentState = InitState; // <- change name to match ENUM
+static PositioningRightSubHSMState_t CurrentState = InitState; // <- change name to match ENUM
 static uint8_t MyPriority;
 
-unsigned int Global_Side;
-
-uint8_t InitDriveFowardSubHSM(void) {
+uint8_t InitPositioningRightSubHSM(void) {
     ES_Event returnEvent;
 
     CurrentState = InitState;
-    returnEvent = RunDriveFowardSubHSM(INIT_EVENT);
+    returnEvent = RunPositioningRightSubHSM(INIT_EVENT);
 
     if (returnEvent.EventType == ES_NO_EVENT) {
         return TRUE;
@@ -46,9 +41,9 @@ uint8_t InitDriveFowardSubHSM(void) {
     return FALSE;
 }
 
-ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
+ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
     uint8_t makeTransition = FALSE; // use to flag transition
-    DriveFowardSubHSMState_t nextState; // <- change type to correct enum
+    PositioningRightSubHSMState_t nextState; // <- change type to correct enum
 
     ES_Tattle(); // trace call stack
 
@@ -56,22 +51,63 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case InitState: // If current state is initial Psedudo State
             if (ThisEvent.EventType == ES_INIT)// only respond to ES_Init
             {
-                nextState = Drive1;
+                ES_Timer_InitTimer(POSITIONING_TIMER, TIMER_POSITIONING_TICK);
+                nextState = Turn90RightState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
+
+                //start a timer here
             }
             break;
 
-        case Drive1: // in the first state, replace this with correct names
+        case Turn90RightState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                Bot_Foward(-BOT_THIRD_SPEED, BOT_THIRD_SPEED);
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == TAPE_FRONT_CENTER_DETECTED) {
-                nextState = Drive2;
+
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = ForwardState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case ForwardState: // in the first state, replace this with correct names
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SPEED);
+            }
+
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+
+            if (ThisEvent.EventType == FRONTRIGHT_TRIPPED) {
+                nextState = RightTrippedState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+
+            if (ThisEvent.EventType == FRONTLEFT_TRIPPED) {
+                nextState = LeftTrippedState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+
+            if (ThisEvent.EventType == BOTH_FRONT_TRIPPED) {
+                nextState = BackUpState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -81,16 +117,19 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case Drive2: // in the first state, replace this with correct names
+        case RightTrippedState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, TIMER_BACKUP_TICK);
+                Bot_Foward(BOT_THIRD_SPEED, BOT_HALF_SPEED);
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == TAPE_FRONT_CENTER_NOT_DETECTED) {
-                nextState = Drive3;
+
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = BackUpState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -100,17 +139,19 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-
-        case Drive3: // in the first state, replace this with correct names
+        case LeftTrippedState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, TIMER_BACKUP_TICK);
+                Bot_Foward(BOT_HALF_SPEED, BOT_THIRD_SPEED);
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == TAPE_BACK_RIGHT_DETECTED || ThisEvent.EventType == TAPE_BACK_LEFT_DETECTED) {
-                nextState = Drive4;
+
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = BackUpState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -120,16 +161,18 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case Drive4: // in the first state, replace this with correct names
-
+        case BackUpState: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                ES_Timer_InitTimer(POSITIONING_TIMER, TIMER_BACKUP_TICK);
+                Bot_Foward(-BOT_HALF_SPEED, -BOT_HALF_SPEED);
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == TAPE_BACK_RIGHT_NOT_DETECTED || ThisEvent.EventType == TAPE_BACK_LEFT_NOT_DETECTED) {
-                nextState = Drive5;
+
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TurnBackState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -138,63 +181,26 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
                 break;
             }
             break;
-
-        case Drive5: // in the first state, replace this with correct names
+        case TurnBackState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, TIMER_90DEGREE_TICK);
+                Bot_Foward(BOT_HALF_SPEED, -BOT_HALF_SPEED);
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == TAPE_FRONT_CENTER_DETECTED) {
-                nextState = Drive6;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == ES_NO_EVENT) {
-                break;
-            }
-            break;
 
-        case Drive6: // in the first state, replace this with correct names
-
-            if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
-            }
-            if (ThisEvent.EventType == ES_EXIT) {
-                Bot_Stop();
-            }
-            if (ThisEvent.EventType == TAPE_FRONT_CENTER_NOT_DETECTED) {
-                nextState = Drive7;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == ES_NO_EVENT) {
-                break;
-            }
-            break;
-
-        case Drive7: // in the first state, replace this with correct names
-
-            if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
-            }
-            if (ThisEvent.EventType == ES_EXIT) {
-                Bot_Stop();
-            }
-            if (ThisEvent.EventType == TAPE_BACK_RIGHT_DETECTED || ThisEvent.EventType == TAPE_BACK_LEFT_DETECTED) {
+            if (ThisEvent.EventType == ES_TIMEOUT) {
                 makeTransition = FALSE;
-                ThisEvent.EventType = FINISHED_NAVIGATION;
+                ThisEvent.EventType = FINISHED_POSITIONING;
                 break;
             }
             if (ThisEvent.EventType == ES_NO_EVENT) {
                 break;
             }
             break;
-
 
         default: // all unhandled states fall into here
             break;
@@ -202,12 +208,13 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
 
     if (makeTransition == TRUE) { // making a state transition, send EXIT and ENTRY
         // recursively call the current state with an exit event
-        RunDriveFowardSubHSM(EXIT_EVENT); // <- rename to your own Run function
+        RunPositioningRightSubHSM(EXIT_EVENT); // <- rename to your own Run function
         CurrentState = nextState;
-        RunDriveFowardSubHSM(ENTRY_EVENT); // <- rename to your own Run function
+        RunPositioningRightSubHSM(ENTRY_EVENT); // <- rename to your own Run function
     }
 
     ES_Tail(); // trace call stack end
+
 
     return ThisEvent;
 }

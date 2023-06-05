@@ -119,7 +119,7 @@ char Bot_Flywheel(char newSpeed) {
     if ((newSpeed < -BOT_MAX_SPEED) || (newSpeed > BOT_MAX_SPEED)) {
         return (ERROR);
     }
-    SHOOTER_DIR = 1;
+    SHOOTER_DIR = 0;
     SHOOTER_DIR_INV = ~(SHOOTER_DIR);
 
     if (PWM_SetDutyCycle(SHOOTER_PWM, newSpeed * (MAX_PWM / BOT_MAX_SPEED)) == ERROR) {
@@ -133,7 +133,7 @@ char Bot_Loader(char newSpeed) {
     if ((newSpeed < -BOT_MAX_SPEED) || (newSpeed > BOT_MAX_SPEED)) {
         return (ERROR);
     }
-    LOADER_DIR = 1;
+    LOADER_DIR = 0;
     LOADER_DIR_INV = ~(LOADER_DIR);
 
     if (PWM_SetDutyCycle(LOADER_PWM, newSpeed * (MAX_PWM / BOT_MAX_SPEED)) == ERROR) {

@@ -6,7 +6,9 @@
 #include "Acquire_Sub.h"
 #include "Drive_Foward_Sub.h"
 #include "bot_Movement.h"
-#include "Positioning_Sub.h"
+#include "Positioning_Left_Sub.h"
+#include "Positioning_Right_Sub.h"
+#include "Avoid_Bump_Sub.h"
 
 #include <stdio.h>
 
@@ -54,8 +56,10 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_INIT)// only respond to ES_Init
             {
                 InitAcquireSubHSM();
+                //NEED TO MAKE A RIGHT AND AND A LEFT DRIVE POSITION SUB STATE
                 InitDriveFowardSubHSM();
-                InitPositioningSubHSM();
+
+
                 nextState = AcquireBeaconState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -69,6 +73,8 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
             }
             if (ThisEvent.EventType == ES_EXIT) {
+                InitPositioningLeftSubHSM();
+                InitPositioningRightSubHSM();
             }
             if (ThisEvent.EventType == ACQUIRED_2KHZ) {
 
@@ -83,7 +89,12 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             break;
 
         case PositionState: //back up until both back bumpers are tripped
-            ThisEvent = RunPositioningSubHSM(ThisEvent);
+
+            if (Global_Side == LEFT_SIDE) {
+                ThisEvent = RunPositioningLeftSubHSM(ThisEvent);
+            } else {
+                ThisEvent = RunPositioningRightSubHSM(ThisEvent);
+            }
 
             if (ThisEvent.EventType == ES_ENTRY) {
             }
@@ -103,14 +114,19 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case DriveFowardState: //back up until both back bumpers are tripped
+        case DriveFowardState: //go forward to goal
             ThisEvent = RunDriveFowardSubHSM(ThisEvent);
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SPEED);
+                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
+            }
+            if (ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == FRONTRIGHT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED){
+                nextState = AvoidBumpState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
             }
             if (ThisEvent.EventType == FINISHED_NAVIGATION) { //so if towards is done and finished navigating, transition top level to shooting
                 makeTransition = FALSE;
@@ -123,17 +139,23 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-            
+
             ///DO THIS CASE LATER, FOR AVOIDING OBSTACLES
         case AvoidBumpState: //back up until both back bumpers are tripped
-
+            
+            ThisEvent = RunAvoid_BumpSubHSM();
+                    
             if (ThisEvent.EventType == ES_ENTRY) {
                 Bot_Stop();
             }
             if (ThisEvent.EventType == ES_EXIT) {
             }
 
-            //SO EVENTS NEED TO BE CHECKED HERE, FINISHED NAVIGATING, BUMP, AVOID TAPE
+            if (ThisEvent.EventType == FINISHED_AVOIDING){
+                nextState = DriveFowardState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+            }
             if (ThisEvent.EventType == ES_NO_EVENT) {
                 break;
             }

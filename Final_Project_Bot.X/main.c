@@ -8,7 +8,6 @@
 #include <BOARD.h>
 #include <serial.h>
 #include <AD.h>
-#include <LED.h>
 
 
 #include <bot_Movement.h>
@@ -17,7 +16,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "xc.h"
-#include "Event_Checker.h"
 
 
 #define DELAY(x)    for (unsigned int wait = 0; wait <= x; wait++) {asm("nop");}
@@ -33,22 +31,21 @@ int main(void) {
 
     BOARD_Init();
     SERIAL_Init();
-    LED_Init();
     AD_Init();
     Bot_Move_Init();
     Bot_Sensor_Init();
 
 
     while (1) {
-        printf("%d\r\n", Read_Tape_Front_Left());
-
-        //        switch (Bot_Bumpers()) {
-        //
-        //            case FLEFT_BUMP_MASK: // Battery Voltage live output
-        //                printf("Front Left Triggered \r\n");
-        //                break;
-        //        }
-        //        DELAY(delaymed);
+        DELAY(delaymed);
+        printf("\r\n%d\r\n", Bot_Side());
+//        switch (Bot_Bumpers()) {
+//
+//            case FLEFT_BUMP_MASK: // Battery Voltage live output
+//                printf("bruh \r\n");
+//                break;
+//        }
+        
 
     }
     while (1);

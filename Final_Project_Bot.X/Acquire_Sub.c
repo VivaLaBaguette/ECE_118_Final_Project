@@ -5,15 +5,16 @@
 #include "Acquire_Sub.h"
 #include "bot_Movement.h"
 
-
 typedef enum {
     InitState,
-    Tank_Turn_State
+    Tank_Turn_State,
+    Acquired_State,
 } AcquireSubHSMState_t;
 
 static const char *StateNames[] = {
     "InitState",
-    "Tank_Turn_State"
+    "Tank_Turn_State",
+    "Acquired_State",
 };
 
 static AcquireSubHSMState_t CurrentState = InitState; // <- change name to match ENUM
@@ -57,6 +58,26 @@ ES_Event RunAcquireSubHSM(ES_Event ThisEvent) {
                 Bot_Stop();
             }
             if (ThisEvent.EventType == DETECTED_2KHZ) {
+                nextState = Acquired_State;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case Acquired_State: // in the first state, replace this with correct names
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(ACQUIRE_TIMER, TIMER_ACQUIRING_TICK);
+                Bot_Foward(BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) {
                 makeTransition = FALSE;
                 ThisEvent.EventType = ACQUIRED_2KHZ;
                 break;

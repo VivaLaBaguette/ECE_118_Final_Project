@@ -1,3 +1,4 @@
+#include "bot_Sensor.h"
 
 #include "ES_Configure.h"
 #include "ES_Framework.h"
@@ -40,6 +41,7 @@ uint8_t InitHSM(uint8_t Priority) {
     MyPriority = Priority;
     // put us into the Initial PseudoState
     CurrentState = Init_State;
+    Global_Side = Bot_Side();
     // post the initial transition event
     if (ES_PostToService(MyPriority, INIT_EVENT) == TRUE) {
         return TRUE;
@@ -70,7 +72,6 @@ ES_Event RunHSM(ES_Event ThisEvent) {
 
 
                 // now put the machine into the actual initial state
-
                 nextState = Reloading_State;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -78,6 +79,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
             }
 
             //RELOADING STATE JUST WAITS FOR TIMER AND MOVES ON
+
         case Reloading_State:
             if (ThisEvent.EventType != ES_NO_EVENT) {
                 switch (ThisEvent.EventType) {
@@ -85,6 +87,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         //start timer
                         ES_Timer_InitTimer(RELOADING_TIMER, TIMER_RELOAD_TICK);
                         Bot_Stop();
+
                         break;
 
                     case ES_EXIT: //when exiting the state, stop
@@ -130,6 +133,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
             }
 
             break;
+
         case Shooting_State:
 
             ThisEvent = RunShootingSubHSM(ThisEvent);
@@ -156,14 +160,16 @@ ES_Event RunHSM(ES_Event ThisEvent) {
             }
 
             break;
-            
+
         case Drive_Backwards_State:
 
             if (ThisEvent.EventType != ES_NO_EVENT) {
                 switch (ThisEvent.EventType) {
                     case ES_ENTRY:
                         printf("Doing the backwards the thing");
+                        Bot_Foward(-BOT_MAX_SPEED, -BOT_MAX_SPEED);
                         break;
+
                     case ES_EXIT:
                         Bot_Stop();
                         break;
@@ -172,13 +178,18 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         nextState = Reloading_State;
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
-                        
                         break;
+
                     case BACKRIGHT_TRIPPED:
                         nextState = Reloading_State;
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
-                        
+                        break;
+
+                    case BOTH_REAR_TRIPPED:
+                        nextState = Reloading_State;
+                        makeTransition = TRUE;
+                        ThisEvent.EventType = ES_NO_EVENT;
                         break;
 
                     case ES_NO_EVENT:

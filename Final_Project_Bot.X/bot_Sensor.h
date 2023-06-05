@@ -8,12 +8,13 @@
 
 #define BUMPER_TRIPPED 0
 #define BUMPER_NOT_TRIPPED 1
-
 //init bot sensor
 void Bot_Sensor_Init(void);
 
 //read battery voltage
 unsigned int Bot_Battery(void);
+
+unsigned int Bot_Side(void);
 
 //reads tape sensor
 unsigned char Bot_Tape_Sensors(void);

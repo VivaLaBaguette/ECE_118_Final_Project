@@ -6,10 +6,19 @@
 #define DELAY(x)    for (unsigned int wait = 0; wait <= x; wait++) {asm("nop");}
 #define delaymed  1830000
 
-#define TIMER_RELOAD_TICK (5*1000) //10seconds 1second = 100 ticks
-#define TIMER_POSITIONING_TICK (1500) //half a second
-#define TIMER_SHOOT_POSITIONING_TICK (500)
-#define TIMER_SHOOTING_TICK (3000)
+#define TIMER_RELOAD_TICK (3000) //10seconds 1second = 100 ticks
+#define TIMER_POSITIONING_TICK (1000) 
+#define TIMER_SHOOT_POSITIONING_TICK (600)
+#define TIMER_SHOOTING_TICK (2000)
+#define TIMER_ACQUIRING_TICK (165)
+#define TIMER_90DEGREE_TICK (750)
+#define TIMER_BACKUP_TICK (300)
+
+
+#define LEFT_SIDE 0
+#define RIGHT_SIDE 1
+
+extern unsigned int Global_Side;
 
 uint8_t InitHSM(uint8_t Priority);
 

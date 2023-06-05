@@ -1,6 +1,7 @@
 #include <bot_Sensor.h>
 #include <BOARD.h>
 #include <xc.h>
+#include <IO_Ports.h>
 
 #include <serial.h>
 #include <AD.h>
@@ -22,7 +23,9 @@
 #define TAPE_BACK_LEFT AD_PORTW5
 
 #define BEACON_2KHZ AD_PORTV3 //can cahnge if already used
-#define BEACON_15KHZ AD_PORTV4
+//#define BEACON_15KHZ 
+
+#define SIDE_INPUT AD_PORTV4 //X03 //switch that tells us which side we on
 
 void Bot_Sensor_Init(void) {
     //for bumpers
@@ -31,11 +34,22 @@ void Bot_Sensor_Init(void) {
     HALL_REAR_RIGHT_TRIS = 1;
     HALL_REAR_LEFT_TRIS = 1;
 
+    IO_PortsSetPortInputs(PORTX, PIN3);
+
     //for tape sensors and beacons
     AD_Init();
     AD_AddPins(TAPE_BACK_LEFT | TAPE_BACK_RIGHT | TAPE_FRONT_CENTER | TAPE_FRONT_LEFT | TAPE_FRONT_RIGHT);
 
-    AD_AddPins(BEACON_2KHZ | BEACON_15KHZ);
+    AD_AddPins(BEACON_2KHZ | SIDE_INPUT);
+}
+
+unsigned int Bot_Side(void) {
+    if (AD_ReadADPin(SIDE_INPUT) > 950){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 //returns 10 bit 2kHz Beacon 0 - 1023
@@ -47,7 +61,6 @@ unsigned int Bot_2_Beacon(void) {
 //returns 10 bit 1.5kHz Beacon 0 - 1023
 
 unsigned int Bot_15_Beacon(void) {
-    return AD_ReadADPin(BEACON_15KHZ);
 }
 
 //read battery voltage
