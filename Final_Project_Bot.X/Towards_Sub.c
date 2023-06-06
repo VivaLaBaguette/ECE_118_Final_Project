@@ -8,9 +8,10 @@
 #include "bot_Movement.h"
 #include "Positioning_Left_Sub.h"
 #include "Positioning_Right_Sub.h"
-//#include "Avoid_Bump_Right_Sub.h"
 #include "Avoid_Obstacle_Left_Sub.h"
+#include "Avoid_Obstacle_Right_Sub.h"
 #include "AvoidLeftWallSub.h"
+#include <AvoidRightWallSub.h>
 
 #include <stdio.h>
 
@@ -94,7 +95,7 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
             if (Global_Side == LEFT_SIDE) {
                 ThisEvent = RunPositioningLeftSubHSM(ThisEvent);
-            } else {
+            } else if (Global_Side == RIGHT_SIDE) {
                 ThisEvent = RunPositioningRightSubHSM(ThisEvent);
             }
 
@@ -122,7 +123,6 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             ThisEvent = RunDriveFowardSubHSM(ThisEvent);
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ;
             }
 
             if (ThisEvent.EventType == ES_EXIT) {
@@ -138,17 +138,19 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             }
 
             if (ThisEvent.EventType == FRONTRIGHT_TRIPPED && Global_Side == RIGHT_SIDE) {
-                //AVOID RIGHT SIDE WALL SUB HSM
-                //                InitAvoidRightWallSubHSM();
-                //                nextState = AvoidWallState;
-                //                makeTransition = TRUE;
-                //                ThisEvent.EventType = ES_NO_EVENT;
-                //                break;
+                InitAvoidRightWallSubHSM();
+                nextState = AvoidWallState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
             }
 
             //if on the right side and either front left or both are tripped, there is an obstacle
             if ((ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == RIGHT_SIDE) {
-
+                InitAvoid_Obstacle_RightSubHSM();
+                nextState = AvoidObstacleState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
             }
             //if on the left side and either front right or both are tripped, there is an obstacle
             if ((ThisEvent.EventType == FRONTRIGHT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == LEFT_SIDE) {
@@ -172,9 +174,9 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
         case AvoidWallState: //back up until both back bumpers are tripped
             if (Global_Side == LEFT_SIDE) {
                 ThisEvent = RunAvoidLeftWallSubHSM(ThisEvent);
-            } else {
+            } else if (Global_Side == RIGHT_SIDE) {
                 //run the avoid right side wall
-                //                ThisEvent = RunAvoidLeftWallSubHSM(ThisEvent);
+                ThisEvent = RunAvoidRightWallSubHSM(ThisEvent);
             }
 
             if (ThisEvent.EventType == ES_ENTRY) {
@@ -197,15 +199,17 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             ///DO THIS CASE LATER, FOR AVOIDING OBSTACLES
         case AvoidObstacleState:
             if (Global_Side == LEFT_SIDE) {
+                Global_Side = RIGHT_SIDE;
                 ThisEvent = RunAvoid_Obstacle_LeftSubHSM(ThisEvent);
-            }
-            else{
-                //ThisEvent = RunAvoid_Obstacle_RightSubHSM(ThisEvent);
+            } else if (Global_Side == RIGHT_SIDE) {
+                Global_Side = LEFT_SIDE;
+                ThisEvent = RunAvoid_Obstacle_RightSubHSM(ThisEvent);
             }
 
             if (ThisEvent.EventType == ES_ENTRY) {
                 Bot_Stop();
             }
+
             if (ThisEvent.EventType == ES_EXIT) {
             }
 

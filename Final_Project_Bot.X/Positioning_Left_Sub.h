@@ -4,6 +4,7 @@
 #include "ES_Configure.h"   // defines ES_Event, INIT_EVENT, ENTRY_EVENT, and EXIT_EVENT
 
 
+
 uint8_t InitPositioningLeftSubHSM(void);
 
 ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent);

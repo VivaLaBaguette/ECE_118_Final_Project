@@ -9,6 +9,8 @@
 
 uint8_t Beacon_2k(void);
 
+uint8_t Beacon_2KCLOSE(void);
+
 uint8_t Beacon_15k(void);
 
 uint8_t Tape_Front_Right(void);

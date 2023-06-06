@@ -19,8 +19,6 @@
 
 extern unsigned int Global_Side;
 
-extern unsigned int original_side;
-
 uint8_t InitHSM(uint8_t Priority);
 
 uint8_t PostHSM(ES_Event ThisEvent);

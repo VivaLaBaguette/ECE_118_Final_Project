@@ -3,6 +3,7 @@
 
 #include "ES_Configure.h"   // defines ES_Event, INIT_EVENT, ENTRY_EVENT, and EXIT_EVENT
 
+
 uint8_t InitAvoid_Obstacle_LeftSubHSM(void);
 
 ES_Event RunAvoid_Obstacle_LeftSubHSM(ES_Event ThisEvent);

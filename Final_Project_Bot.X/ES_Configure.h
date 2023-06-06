@@ -64,6 +64,9 @@ typedef enum {
     DETECTED_15KHZ,
     NOT_DETECTED_15KHZ,
 
+    DETECTED_CLOSE_2KHZ,
+    NOT_DETECTED_CLOSE_2KHZ,
+
     NO_BUMPER_TRIPPED,
     BOTH_FRONT_TRIPPED,
     BOTH_REAR_TRIPPED,
@@ -88,6 +91,8 @@ typedef enum {
     FINISHED_SHOOTING,
     FINISHED_AVOIDING,
     FINISHED_OBSTACLE,
+    FINISHED_BACKWARDS,
+
 } ES_EventTyp_t;
 
 static const char *EventNames[] = {
@@ -114,6 +119,8 @@ static const char *EventNames[] = {
     "BACKLEFT_NOT_TRIPPED",
     "DETECTED_2KHZ",
     "NOT_DETECTED_2KHZ",
+    "DETECTED_CLOSE_2KHZ",
+    "NOT_DETECTED_CLOSE_2KHZ",
     "DETECTED_15KHZ",
     "NOT_DETECTED_15KHZ",
     "NO_BUMPER_TRIPPED",
@@ -138,6 +145,7 @@ static const char *EventNames[] = {
     "FINISHED_SHOOTING",
     "FINISHED_AVOIDING",
     "FINISHED_OBSTACLE",
+    "FINISHED_BACKWARDS",
 };
 
 
@@ -149,7 +157,7 @@ static const char *EventNames[] = {
 
 /****************************************************************************/
 // This is the list of event checking functions
-#define EVENT_CHECK_LIST  Beacon_2k, Beacon_15k, Tape_Front_Right, Tape_Front_Center, Tape_Front_Left, Tape_Back_Right, Tape_Back_Left,
+#define EVENT_CHECK_LIST  Beacon_2k, Beacon_2KCLOSE, Beacon_15k, Tape_Front_Right, Tape_Front_Center, Tape_Front_Left, Tape_Back_Right, Tape_Back_Left,
 
 /****************************************************************************/
 // These are the definitions for the post functions to be executed when the
@@ -162,7 +170,7 @@ static const char *EventNames[] = {
 #define TIMER3_RESP_FUNC PostHSM
 #define TIMER4_RESP_FUNC PostHSM
 #define TIMER5_RESP_FUNC PostHSM
-#define TIMER6_RESP_FUNC TIMER_UNUSED
+#define TIMER6_RESP_FUNC PostHSM
 #define TIMER7_RESP_FUNC TIMER_UNUSED
 #define TIMER8_RESP_FUNC TIMER_UNUSED
 #define TIMER9_RESP_FUNC TIMER_UNUSED
@@ -187,6 +195,7 @@ static const char *EventNames[] = {
 #define SHOOTING_TIMER 3
 #define ACQUIRE_TIMER 4
 #define AVOID_TIMER 5
+#define BACKUP_TIMER 6
 /****************************************************************************/
 // The maximum number of services sets an upper bound on the number of 
 // services that the framework will handle. Reasonable values are 8 and 16

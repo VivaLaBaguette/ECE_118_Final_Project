@@ -7,6 +7,8 @@
 #include "bot_Movement.h"
 #include "Towards_Sub.h"
 #include "Shooting_Sub.h"
+#include "BackwardsLeft_Sub.h"
+#include "BackwardsRight_Sub.h"
 
 #include <stdio.h>
 
@@ -32,8 +34,7 @@ static const char *StateNames[] = {
     "Drive_Backwards_State",
 };
 
-
-
+static unsigned int Origin_Side;
 static HSMState_t CurrentState = Init_State; // <- change enum name to match ENUM
 static uint8_t MyPriority;
 
@@ -41,8 +42,9 @@ uint8_t InitHSM(uint8_t Priority) {
     MyPriority = Priority;
     // put us into the Initial PseudoState
     CurrentState = Init_State;
-    unsigned int Global_Side = Bot_Side();
-    unsigned int original_side = Global_Side;
+    Global_Side = Bot_Side();
+    Origin_Side = Global_Side;
+
     // post the initial transition event
     if (ES_PostToService(MyPriority, INIT_EVENT) == TRUE) {
         return TRUE;
@@ -82,6 +84,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType != ES_NO_EVENT) {
                 switch (ThisEvent.EventType) {
                     case ES_ENTRY:
+
                         //start timer
                         ES_Timer_InitTimer(RELOADING_TIMER, TIMER_RELOAD_TICK);
                         Bot_Stop();
@@ -148,6 +151,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         break;
 
                     case FINISHED_SHOOTING: // change to finshed shooting or smthing
+                        InitBackwardsLeftSubHSM();
                         nextState = Drive_Backwards_State;
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
@@ -163,31 +167,25 @@ ES_Event RunHSM(ES_Event ThisEvent) {
 
         case Drive_Backwards_State:
 
+            if (Global_Side == LEFT_SIDE) {
+                ThisEvent = RunBackwardsLeftSubHSM(ThisEvent);
+            } else if (Global_Side == RIGHT_SIDE) {
+                ThisEvent = RunBackwardsRightSubHSM(ThisEvent);
+            }
+
+
             if (ThisEvent.EventType != ES_NO_EVENT) {
                 switch (ThisEvent.EventType) {
                     case ES_ENTRY:
                         printf("Doing the backwards the thing");
-                        Bot_Foward(-BOT_MAX_SPEED, -BOT_MAX_SPEED);
                         break;
 
                     case ES_EXIT:
                         Bot_Stop();
                         break;
 
-//                    case BACKLEFT_TRIPPED:
-//                        nextState = Reloading_State;
-//                        makeTransition = TRUE;
-//                        ThisEvent.EventType = ES_NO_EVENT;
-//                        break;
-//
-//                    case BACKRIGHT_TRIPPED:
-//                        nextState = Reloading_State;
-//                        makeTransition = TRUE;
-//                        ThisEvent.EventType = ES_NO_EVENT;
-//                        break;
-
-                    case BOTH_REAR_TRIPPED:
-                        nextState = Reloading_State;
+                    case FINISHED_BACKWARDS:
+                        nextState = Reloading_State; //NEED TO CHANGE TO REPOSITION STATE
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
                         break;

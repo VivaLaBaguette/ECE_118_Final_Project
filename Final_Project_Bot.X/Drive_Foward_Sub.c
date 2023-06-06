@@ -66,11 +66,10 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
 
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
-                    Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
-                } else {
-                    Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
+                    Bot_Foward(BOT_SIX_SPEED, BOT_SIX_SPEED);
+                } else if (Global_Side == RIGHT_SIDE) {
+                    Bot_Foward(BOT_SIX_SPEED, BOT_SIX_SPEED);
                 }
-                
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -89,11 +88,13 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
         case Drive2: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
+
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
-                } else {
+                } else if (Global_Side == RIGHT_SIDE) {
                     Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
                 }
+
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -115,7 +116,7 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
-                } else {
+                } else if (Global_Side == RIGHT_SIDE) {
                     Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
                 }
             }
@@ -138,7 +139,7 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
-                } else {
+                } else if (Global_Side == RIGHT_SIDE) {
                     Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
                 }
             }
@@ -161,7 +162,7 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
-                } else {
+                } else if (Global_Side == RIGHT_SIDE) {
                     Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
                 }
             }
@@ -184,7 +185,7 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
-                } else {
+                } else if (Global_Side == RIGHT_SIDE) {
                     Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
                 }
             }
@@ -207,7 +208,7 @@ ES_Event RunDriveFowardSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(BOT_MAX_SLOW_SPEED, BOT_MAX_SPEED);
-                } else {
+                } else if (Global_Side == RIGHT_SIDE) {
                     Bot_Foward(BOT_MAX_SPEED, BOT_MAX_SLOW_SPEED);
                 }
             }

@@ -53,7 +53,7 @@ ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
         case InitState: // If current state is initial Psedudo State
             if (ThisEvent.EventType == ES_INIT)// only respond to ES_Init
             {
-                ES_Timer_InitTimer(POSITIONING_TIMER, TIMER_90DEGREE_TICK);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 670);
                 nextState = Turn90RightState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -123,7 +123,7 @@ ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
 
             if (ThisEvent.EventType == ES_ENTRY) {
                 ES_Timer_InitTimer(ACQUIRE_TIMER, TIMER_BACKUP_TICK);
-                Bot_Foward(BOT_HALF_SPEED, BOT_THIRD_SPEED);
+                Bot_Foward(BOT_THIRD_SPEED, BOT_HALF_SPEED);
             }
 
             if (ThisEvent.EventType == ES_EXIT) {
@@ -145,7 +145,7 @@ ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
 
             if (ThisEvent.EventType == ES_ENTRY) {
                 ES_Timer_InitTimer(ACQUIRE_TIMER, TIMER_BACKUP_TICK);
-                Bot_Foward(BOT_THIRD_SPEED, BOT_HALF_SPEED);
+                Bot_Foward(BOT_HALF_SPEED, BOT_THIRD_SPEED);
             }
 
             if (ThisEvent.EventType == ES_EXIT) {
@@ -186,7 +186,7 @@ ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
         case TurnBackState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(ACQUIRE_TIMER, 600);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, 650);
                 Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
             }
 
@@ -204,7 +204,7 @@ ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
                 break;
             }
             break;
-
+            
         case BacktoWallState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
@@ -225,6 +225,7 @@ ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
                 break;
             }
             break;
+
 
         default: // all unhandled states fall into here
             break;

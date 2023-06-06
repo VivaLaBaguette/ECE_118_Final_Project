@@ -4,6 +4,7 @@
 #include "ES_Configure.h"   // defines ES_Event, INIT_EVENT, ENTRY_EVENT, and EXIT_EVENT
 
 
+
 uint8_t InitAcquireSubHSM(void);
 
 ES_Event RunAcquireSubHSM(ES_Event ThisEvent);

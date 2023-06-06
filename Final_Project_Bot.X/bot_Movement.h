@@ -7,7 +7,7 @@
 #include <BOARD.h>
 
 #define BOT_MAX_SPEED 100
-#define BOT_MAX_SLOW_SPEED 98
+#define BOT_MAX_SLOW_SPEED 97
 
 #define BOT_THIRD_SPEED 75
 #define BOT_SIX_SPEED 63
@@ -19,7 +19,7 @@
 #define BOT_LEFT_MAX_SPEED 99.5
 
 #define BOT_LOADER_SPEED 20
-#define BOT_FLYWHEEL_SPEED 70
+#define BOT_FLYWHEEL_SPEED 60
 
 //init bot
 void Bot_Move_Init(void);

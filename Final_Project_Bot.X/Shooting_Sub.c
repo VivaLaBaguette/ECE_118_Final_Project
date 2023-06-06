@@ -15,7 +15,7 @@ typedef enum {
     PressIntoState,
     BackUpState,
     FlywheelWaitState,
-    LeftABit,
+    TurnABit,
     Detect2State,
     AdjustLeft,
     AdjustRight,
@@ -32,7 +32,7 @@ static const char *StateNames[] = {
     "PressIntoState",
     "BackUpState",
     "FlywheelWaitState",
-    "LeftABit",
+    "TurnABit",
     "Detect2State",
     "AdjustLeft",
     "AdjustRight",
@@ -41,6 +41,8 @@ static const char *StateNames[] = {
 
 static ShootingSubHSMState_t CurrentState = InitSubState; // <- change name to match ENUM
 static uint8_t MyPriority;
+
+
 
 uint8_t InitShootingSubHSM(void) {
     ES_Event returnEvent;
@@ -99,7 +101,7 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
-//                ES_Timer_InitTimer(SHOOTING_TIMER, 150);
+                //                ES_Timer_InitTimer(SHOOTING_TIMER, 150);
 
             }
             if (ThisEvent.EventType == FRONTLEFT_TRIPPED) {
@@ -128,12 +130,13 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
         case LeftWallState: // in the first state, replace this with correct names
             //think about timing here
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(-BOT_SLOWEST_SPEED, BOT_THIRD_SPEED);
+                ES_Timer_InitTimer(SHOOTING_TIMER, 200);
+                Bot_Foward(-BOT_THIRD_SPEED, BOT_HALF_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == FRONTRIGHT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) {
+            if (ThisEvent.EventType == ES_TIMEOUT) {
                 nextState = PressIntoState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -147,7 +150,8 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
         case RightWallState: // in the first state, replace this with correct names
             //think about timing here
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_THIRD_SPEED, -BOT_SLOWEST_SPEED);
+                ES_Timer_InitTimer(SHOOTING_TIMER, 200);
+                Bot_Foward(BOT_HALF_SPEED, -BOT_THIRD_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -203,36 +207,11 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case FlywheelWaitState: // in the first state, replace this with correct names
-            //think about timing here
+        case FlywheelWaitState:
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 500);
+                ES_Timer_InitTimer(SHOOTING_TIMER, 300);
             }
             if (ThisEvent.EventType == ES_EXIT) {
-            }
-            if (ThisEvent.EventType == ES_TIMEOUT) {
-                if (Global_Side == LEFT_SIDE) {
-                    nextState = LeftABit;
-                } else {
-                    nextState = Detect2State;
-                }
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == ES_NO_EVENT) {
-                break;
-            }
-            break;
-
-        case LeftABit: // in the first state, replace this with correct names
-            //think about timing here
-            if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 500);
-                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
-            }
-            if (ThisEvent.EventType == ES_EXIT) {
-                Bot_Stop();
             }
             if (ThisEvent.EventType == ES_TIMEOUT) {
                 nextState = Detect2State;
@@ -249,15 +228,15 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             //think about timing here
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
-                    Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
+                    Bot_Foward(BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
                 } else {
-                    Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
+                    Bot_Foward(-BOT_THIRD_SPEED, BOT_THIRD_SPEED);
                 }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == DETECTED_2KHZ) {
+            if (ThisEvent.EventType == DETECTED_CLOSE_2KHZ) {
                 if (Global_Side == LEFT_SIDE) {
                     nextState = AdjustLeft;
                 } else {
@@ -276,8 +255,8 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
         case AdjustLeft: // in the first state, replace this with correct names
             //think about timing here
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 128); //try 130 if it doesnt work
-                Bot_Foward(BOT_HALF_SPEED, -BOT_HALF_SPEED);
+                ES_Timer_InitTimer(SHOOTING_TIMER, 130); //try 130 if it doesnt work
+                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -315,7 +294,6 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
 
 
         case ShootState: // in the first state, replace this with correct names
-
             if (ThisEvent.EventType == ES_ENTRY) {
                 ES_Timer_InitTimer(SHOOTING_TIMER, TIMER_SHOOTING_TICK);
                 Bot_Loader(BOT_LOADER_SPEED);
