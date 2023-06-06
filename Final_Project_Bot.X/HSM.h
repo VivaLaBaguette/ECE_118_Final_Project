@@ -14,12 +14,12 @@
 #define TIMER_90DEGREE_TICK (730)
 #define TIMER_BACKUP_TICK (400)
 
-
 #define LEFT_SIDE 0
 #define RIGHT_SIDE 1
 
 extern unsigned int Global_Side;
-extern unsigned int Original_Side;
+
+extern unsigned int original_side;
 
 uint8_t InitHSM(uint8_t Priority);
 

@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "xc.h"
+//#include "Event_Checker.h"
+//#include "HSM.h"
 
 
 #define DELAY(x)    for (unsigned int wait = 0; wait <= x; wait++) {asm("nop");}
@@ -37,8 +39,7 @@ int main(void) {
 
 
     while (1) {
-        DELAY(delaymed);
-        Bot_Loader(BOT_SLOW_SPEED);
+        Bot_Loader(19);
 //        switch (Bot_Bumpers()) {
 //
 //            case FLEFT_BUMP_MASK: // Battery Voltage live output

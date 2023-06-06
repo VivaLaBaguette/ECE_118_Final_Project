@@ -9,7 +9,7 @@
 #include "Positioning_Left_Sub.h"
 #include "Positioning_Right_Sub.h"
 //#include "Avoid_Bump_Right_Sub.h"
-//#include "Avoid_Bump_Left_Sub.h"
+#include "Avoid_Obstacle_Left_Sub.h"
 #include "AvoidLeftWallSub.h"
 
 #include <stdio.h>
@@ -91,7 +91,7 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
             break;
 
         case PositionState: //back up until both back bumpers are tripped
-            
+
             if (Global_Side == LEFT_SIDE) {
                 ThisEvent = RunPositioningLeftSubHSM(ThisEvent);
             } else {
@@ -148,13 +148,15 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
             //if on the right side and either front left or both are tripped, there is an obstacle
             if ((ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == RIGHT_SIDE) {
-                //InitObstacleLeftSubHSM();
+
             }
             //if on the left side and either front right or both are tripped, there is an obstacle
             if ((ThisEvent.EventType == FRONTRIGHT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == LEFT_SIDE) {
-
+                InitAvoid_Obstacle_LeftSubHSM();
+                nextState = AvoidObstacleState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
             }
-
 
             if (ThisEvent.EventType == FINISHED_NAVIGATION) { //so if towards is done and finished navigating, transition top level to shooting
                 makeTransition = FALSE;
@@ -193,9 +195,13 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
 
             ///DO THIS CASE LATER, FOR AVOIDING OBSTACLES
-        case AvoidObstacleState: //back up until both back bumpers are tripped
-
-
+        case AvoidObstacleState:
+            if (Global_Side == LEFT_SIDE) {
+                ThisEvent = RunAvoid_Obstacle_LeftSubHSM(ThisEvent);
+            }
+            else{
+                //ThisEvent = RunAvoid_Obstacle_RightSubHSM(ThisEvent);
+            }
 
             if (ThisEvent.EventType == ES_ENTRY) {
                 Bot_Stop();

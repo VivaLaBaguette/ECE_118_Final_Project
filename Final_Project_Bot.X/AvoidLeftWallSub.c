@@ -50,7 +50,7 @@ ES_Event RunAvoidLeftWallSubHSM(ES_Event ThisEvent) {
         case BackUpState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(POSITIONING_TIMER, 50);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 100);
                 Bot_Foward(-BOT_HALF_SPEED, -BOT_MAX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {

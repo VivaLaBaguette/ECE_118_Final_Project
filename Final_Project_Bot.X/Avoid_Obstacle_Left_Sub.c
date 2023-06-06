@@ -2,7 +2,7 @@
 #include "ES_Framework.h"
 #include "BOARD.h"
 #include "HSM.h"
-#include "Avoid_Bump_Left_Sub.h"
+#include "Avoid_Obstacle_Left_Sub.h"
 #include "bot_Movement.h"
 
 typedef enum {
@@ -13,7 +13,7 @@ typedef enum {
     BackUpState2,
     Turn90BackState,
 
-} Avoid_Bump_LeftSubHSMState_t;
+} Avoid_Obstacle_LeftSubHSMState_t;
 
 static const char *StateNames[] = {
     "InitSubState",
@@ -24,23 +24,23 @@ static const char *StateNames[] = {
     "Turn90BackState",
 };
 
-static Avoid_Bump_LeftSubHSMState_t CurrentState = InitSubState; // <- change name to match ENUM
+static Avoid_Obstacle_LeftSubHSMState_t CurrentState = InitSubState; // <- change name to match ENUM
 static uint8_t MyPriority;
 
-uint8_t InitAvoid_Bump_LeftSubHSM(void) {
+uint8_t InitAvoid_Obstacle_LeftSubHSM(void) {
     ES_Event returnEvent;
 
     CurrentState = InitSubState;
-    returnEvent = RunAvoid_Bump_LeftSubHSM(INIT_EVENT);
+    returnEvent = RunAvoid_Obstacle_LeftSubHSM(INIT_EVENT);
     if (returnEvent.EventType == ES_NO_EVENT) {
         return TRUE;
     }
     return FALSE;
 }
 
-ES_Event RunAvoid_Bump_LeftSubHSM(ES_Event ThisEvent) {
+ES_Event RunAvoid_Obstacle_LeftSubHSM(ES_Event ThisEvent) {
     uint8_t makeTransition = FALSE; // use to flag transition
-    Avoid_Bump_LeftSubHSMState_t nextState; // <- change type to correct enum
+    Avoid_Obstacle_LeftSubHSMState_t nextState; // <- change type to correct enum
 
     ES_Tattle(); // trace call stack
 
@@ -48,7 +48,7 @@ ES_Event RunAvoid_Bump_LeftSubHSM(ES_Event ThisEvent) {
         case InitSubState: // If current state is initial Psedudo State
             if (ThisEvent.EventType == ES_INIT)// only respond to ES_Init
             {
-                ES_Timer_InitTimer(AVOID_TIMER, TIMER_BACKUP_TICK);
+                ES_Timer_InitTimer(AVOID_TIMER, 200);
                 nextState = BackUpState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -59,7 +59,7 @@ ES_Event RunAvoid_Bump_LeftSubHSM(ES_Event ThisEvent) {
         case BackUpState: //go forward to goal
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(-BOT_HALF_SPEED, -BOT_HALF_SPEED);
+                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -75,11 +75,11 @@ ES_Event RunAvoid_Bump_LeftSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case TurnState: //go forward to goal
+        case TurnState: //turn 90 degrees away from left side
 
             if (ThisEvent.EventType == ES_ENTRY) {
                 ES_Timer_InitTimer(AVOID_TIMER, 600);
-                Bot_Foward(BOT_HALF_SPEED, -BOT_HALF_SPEED);
+                Bot_Foward(BOT_HALF_SPEED, -BOT_MAX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -117,8 +117,8 @@ ES_Event RunAvoid_Bump_LeftSubHSM(ES_Event ThisEvent) {
         case BackUpState2: //go forward to goal
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(AVOID_TIMER, TIMER_BACKUP_TICK);
-                Bot_Foward(-BOT_HALF_SPEED, -BOT_HALF_SPEED);
+                ES_Timer_InitTimer(AVOID_TIMER, 200);
+                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -137,8 +137,8 @@ ES_Event RunAvoid_Bump_LeftSubHSM(ES_Event ThisEvent) {
         case Turn90BackState: //go forward to goal
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(AVOID_TIMER, TIMER_90DEGREE_TICK);
-                Bot_Foward(-BOT_HALF_SPEED, BOT_HALF_SPEED);
+                ES_Timer_InitTimer(AVOID_TIMER, 600);
+                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -161,9 +161,9 @@ ES_Event RunAvoid_Bump_LeftSubHSM(ES_Event ThisEvent) {
 
     if (makeTransition == TRUE) { // making a state transition, send EXIT and ENTRY
         // recursively call the current state with an exit event
-        RunAvoid_Bump_LeftSubHSM(EXIT_EVENT); // <- rename to your own Run function
+        RunAvoid_Obstacle_LeftSubHSM(EXIT_EVENT); // <- rename to your own Run function
         CurrentState = nextState;
-        RunAvoid_Bump_LeftSubHSM(ENTRY_EVENT); // <- rename to your own Run function
+        RunAvoid_Obstacle_LeftSubHSM(ENTRY_EVENT); // <- rename to your own Run function
     }
 
     ES_Tail(); // trace call stack end

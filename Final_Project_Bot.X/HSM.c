@@ -41,8 +41,8 @@ uint8_t InitHSM(uint8_t Priority) {
     MyPriority = Priority;
     // put us into the Initial PseudoState
     CurrentState = Init_State;
-    Global_Side = Bot_Side();
-    Original_Side = Global_Side;
+    unsigned int Global_Side = Bot_Side();
+    unsigned int original_side = Global_Side;
     // post the initial transition event
     if (ES_PostToService(MyPriority, INIT_EVENT) == TRUE) {
         return TRUE;

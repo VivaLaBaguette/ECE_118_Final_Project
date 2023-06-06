@@ -16,7 +16,7 @@
 #define BEACON_15KHZ_DETECTED_THRESHOLD 570
 #define BEACON_15KHZ_NOT_THRESHOLD 535
 
-#define TAPE_THRESHOLD 42
+#define TAPE_THRESHOLD 45
 /*******************************************************************************
  * EVENTCHECKER_TEST SPECIFIC CODE                                                             *
  ******************************************************************************/
