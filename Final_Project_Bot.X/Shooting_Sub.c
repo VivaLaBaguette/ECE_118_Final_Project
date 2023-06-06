@@ -77,7 +77,7 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
-                } else {
+                } else if(Global_Side == RIGHT_SIDE){
                     Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
                 }
             }
@@ -156,7 +156,7 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) {
+            if (ThisEvent.EventType == ES_TIMEOUT) {
                 nextState = PressIntoState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -209,7 +209,7 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
 
         case FlywheelWaitState:
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 300);
+                ES_Timer_InitTimer(SHOOTING_TIMER, 100);
             }
             if (ThisEvent.EventType == ES_EXIT) {
             }
@@ -229,7 +229,7 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == ES_ENTRY) {
                 if (Global_Side == LEFT_SIDE) {
                     Bot_Foward(BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
-                } else {
+                } else if (Global_Side == RIGHT_SIDE){
                     Bot_Foward(-BOT_THIRD_SPEED, BOT_THIRD_SPEED);
                 }
             }
@@ -239,7 +239,7 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             if (ThisEvent.EventType == DETECTED_CLOSE_2KHZ) {
                 if (Global_Side == LEFT_SIDE) {
                     nextState = AdjustLeft;
-                } else {
+                } else if (Global_Side == RIGHT_SIDE){
                     nextState = AdjustRight;
                 }
 
@@ -255,7 +255,7 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
         case AdjustLeft: // in the first state, replace this with correct names
             //think about timing here
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 130); //try 130 if it doesnt work
+                ES_Timer_InitTimer(SHOOTING_TIMER, 12); //try 10 if it doesnt work
                 Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
@@ -275,8 +275,8 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
         case AdjustRight: // in the first state, replace this with correct names
             //think about timing here
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 200);
-                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
+                ES_Timer_InitTimer(SHOOTING_TIMER, 110);
+                Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();

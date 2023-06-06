@@ -5,10 +5,11 @@
         <group>
             <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/HSM.c</file>
             <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.c</file>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AvoidRightWallSub.h</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AvoidLeftWallSub.h</file>
             <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.h</file>
             <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Towards_Sub.c</file>
-            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AvoidRightWallSub.c</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AVOIDRIGHTWALL.h.h</file>
+            <file>file:/C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h</file>
         </group>
     </open-files>
 </project-private>

@@ -9,6 +9,8 @@
 #include "Shooting_Sub.h"
 #include "BackwardsLeft_Sub.h"
 #include "BackwardsRight_Sub.h"
+#include "Return_Sub.h"
+#include "Reposition_Sub.h"
 
 #include <stdio.h>
 
@@ -24,6 +26,8 @@ typedef enum {
     Drive_Towards_State,
     Shooting_State,
     Drive_Backwards_State,
+    ReturnState,
+    RepositionState,
 } HSMState_t;
 
 static const char *StateNames[] = {
@@ -32,6 +36,8 @@ static const char *StateNames[] = {
     "Drive_Towards_State",
     "Shooting_State",
     "Drive_Backwards_State",
+    "ReturnState",
+    "RepositionState",
 };
 
 static unsigned int Origin_Side;
@@ -151,7 +157,11 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         break;
 
                     case FINISHED_SHOOTING: // change to finshed shooting or smthing
-                        InitBackwardsLeftSubHSM();
+                        if (Global_Side == LEFT_SIDE) {
+                            InitBackwardsLeftSubHSM();
+                        } else if (Global_Side == RIGHT_SIDE) {
+                            InitBackwardsRightSubHSM();
+                        }
                         nextState = Drive_Backwards_State;
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
@@ -185,7 +195,70 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         break;
 
                     case FINISHED_BACKWARDS:
-                        nextState = Reloading_State; //NEED TO CHANGE TO REPOSITION STATE
+                        if (Origin_Side == Global_Side) {
+                            nextState = Reloading_State;
+                        } else if (Origin_Side != Global_Side) {
+                            InitReturnSubHSM();
+                            nextState = ReturnState; //NEED TO CHANGE TO REPOSITION STATE
+                        }
+                        makeTransition = TRUE;
+                        ThisEvent.EventType = ES_NO_EVENT;
+                        break;
+
+                    case ES_NO_EVENT:
+                    default:
+                        break;
+                }
+            }
+
+            break;
+
+        case ReturnState:
+
+            ThisEvent = RunReturnSubHSM(ThisEvent);
+
+            if (ThisEvent.EventType != ES_NO_EVENT) {
+                switch (ThisEvent.EventType) {
+                    case ES_ENTRY:
+                        printf("Doing the returns the thing");
+                        break;
+
+                    case ES_EXIT:
+                        Bot_Stop();
+                        break;
+
+                    case FINISHED_RETURNING:
+                        InitRepositionSubHSM();
+                        nextState = RepositionState; //NEED TO CHANGE TO REPOSITION STATE
+                        makeTransition = TRUE;
+                        ThisEvent.EventType = ES_NO_EVENT;
+                        break;
+
+                    case ES_NO_EVENT:
+                    default:
+                        break;
+                }
+            }
+
+            break;
+
+        case RepositionState:
+
+            ThisEvent = RunRepositionSubHSM(ThisEvent);
+
+            if (ThisEvent.EventType != ES_NO_EVENT) {
+                switch (ThisEvent.EventType) {
+                    case ES_ENTRY:
+                        printf("Doing the repositioning the thing");
+                        break;
+
+                    case ES_EXIT:
+                        Bot_Stop();
+                        break;
+
+                    case FINISHED_REPOSITIONING:
+                        InitTowardsSubHSM();
+                        nextState = Drive_Towards_State; //NEED TO CHANGE TO REPOSITION STATE
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
                         break;

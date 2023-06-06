@@ -51,7 +51,7 @@ ES_Event RunBackwardsRightSubHSM(ES_Event ThisEvent) {
 
         case BackUpState: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(-BOT_MAX_SPEED, -94);
+                Bot_Foward(-BOT_MAX_SPEED, -98);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -76,7 +76,7 @@ ES_Event RunBackwardsRightSubHSM(ES_Event ThisEvent) {
 
         case AvoidWallState: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_MAX_SPEED, BOT_HALF_SPEED);
+                Bot_Foward(BOT_THIRD_SPEED, BOT_HALF_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();

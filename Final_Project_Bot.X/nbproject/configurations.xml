@@ -35,12 +35,12 @@
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Drive_Foward_Sub.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Positioning_Left_Sub.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Positioning_Right_Sub.h</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AvoidLeftWallSub.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Obstacle_Left_Sub.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsLeft_Sub.h</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AvoidRightWallSub.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Obstacle_Right_Sub.h</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsRight_Sub.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Return_Sub.h</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Reposition_Sub.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -76,12 +76,12 @@
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Drive_Foward_Sub.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Positioning_Left_Sub.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Positioning_Right_Sub.c</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AvoidLeftWallSub.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Obstacle_Left_Sub.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsLeft_Sub.c</itemPath>
-      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/AvoidRightWallSub.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Obstacle_Right_Sub.c</itemPath>
       <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsRight_Sub.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Return_Sub.c</itemPath>
+      <itemPath>C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Reposition_Sub.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -145,7 +145,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="C:\Users\seens\OneDrive\Desktop\ECE_118_Final_Project\Final_Project_Bot.X"/>
+                  value="C:\Users\seens\OneDrive\Desktop\ECE_118_Final_Project\Final_Project_Bot.X;."/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="false"/>

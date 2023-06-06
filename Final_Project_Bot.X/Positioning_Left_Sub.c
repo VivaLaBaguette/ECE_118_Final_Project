@@ -165,7 +165,7 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
 
         case BackUpState: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(POSITIONING_TIMER, 200);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 400);
                 Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
 
@@ -186,7 +186,7 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
         case TurnBackState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(ACQUIRE_TIMER, 650);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, 580);
                 Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
 

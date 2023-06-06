@@ -4,24 +4,34 @@
 #include "HSM.h"
 #include "Avoid_Obstacle_Right_Sub.h"
 #include "bot_Movement.h"
+#include "BackwardsRight_Sub.h"
 
 typedef enum {
     InitSubState,
     BackUpState,
+    TinyForwardState,
     TurnState,
+    AvoidRightState,
     ForwardState,
     BackUpState2,
     Turn90BackState,
-
+    AcquireState,
+    TurnBackState,
+    TinyBackupState,
 } Avoid_Obstacle_RightSubHSMState_t;
 
 static const char *StateNames[] = {
     "InitSubState",
     "BackUpState",
+    "TinyForwardState",
     "TurnState",
+    "AvoidRightState",
     "ForwardState",
     "BackUpState2",
     "Turn90BackState",
+    "AcquireState",
+    "TurnBackState",
+    "TinyBackupState",
 };
 
 static Avoid_Obstacle_RightSubHSMState_t CurrentState = InitSubState; // <- change name to match ENUM
@@ -48,7 +58,7 @@ ES_Event RunAvoid_Obstacle_RightSubHSM(ES_Event ThisEvent) {
         case InitSubState: // If current state is initial Psedudo State
             if (ThisEvent.EventType == ES_INIT)// only respond to ES_Init
             {
-                ES_Timer_InitTimer(AVOID_TIMER, 200);
+                InitBackwardsRightSubHSM();
                 nextState = BackUpState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -57,9 +67,29 @@ ES_Event RunAvoid_Obstacle_RightSubHSM(ES_Event ThisEvent) {
             break;
 
         case BackUpState: //go forward to goal
+            ThisEvent = RunBackwardsRightSubHSM(ThisEvent);
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == FINISHED_BACKWARDS) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = TinyForwardState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case TinyForwardState: //go forward to goal
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(AVOID_TIMER, 200);
+                Bot_Foward(BOT_THIRD_SPEED, BOT_THIRD_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -78,8 +108,8 @@ ES_Event RunAvoid_Obstacle_RightSubHSM(ES_Event ThisEvent) {
         case TurnState: //turn 90 degrees away from left side
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(AVOID_TIMER, 600);
-                Bot_Foward(BOT_HALF_SPEED, -BOT_MAX_SPEED);
+                ES_Timer_InitTimer(AVOID_TIMER, 450);
+                Bot_Foward(-BOT_THIRD_SPEED, BOT_MAX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -98,13 +128,39 @@ ES_Event RunAvoid_Obstacle_RightSubHSM(ES_Event ThisEvent) {
         case ForwardState: //go forward to goal
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                Bot_Foward(BOT_LEFT_MAX_SPEED, BOT_MAX_SPEED);
+                Bot_Foward(BOT_THIRD_SPEED, BOT_THIRD_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == BOTH_FRONT_TRIPPED) {
+            if (ThisEvent.EventType == FRONTLEFT_TRIPPED) {
+                nextState = AvoidLeftState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == BOTH_FRONT_TRIPPED || ThisEvent.EventType == FRONTRIGHT_TRIPPED) {
                 nextState = BackUpState2;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case AvoidLeftState: //go forward to goal
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(POSITIONING_TIMER, 250);
+                Bot_Foward(-BOT_HALF_SPEED, -BOT_THIRD_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = ForwardState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -118,13 +174,14 @@ ES_Event RunAvoid_Obstacle_RightSubHSM(ES_Event ThisEvent) {
 
             if (ThisEvent.EventType == ES_ENTRY) {
                 ES_Timer_InitTimer(AVOID_TIMER, 200);
-                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
+                Bot_Foward(-BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
+
             }
             if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
-                nextState = Turn90BackState;
+                nextState = AcquireState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -134,14 +191,55 @@ ES_Event RunAvoid_Obstacle_RightSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case Turn90BackState: //go forward to goal
+        case AcquireState: //go forward to goal
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(AVOID_TIMER, 600);
-                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
+                Bot_Foward(BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
+            }
+            if (ThisEvent.EventType == DETECTED_2KHZ) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = TurnBackState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case TurnBackState: //go forward to goal
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(AVOID_TIMER, 100);
+//                Bot_Foward(BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+                
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = TinyBackupState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case TinyBackupState: //go forward to goal
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(AVOID_TIMER, 300);
+                Bot_Foward(-BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+                Global_Side = RIGHT_SIDE;
             }
             if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
                 makeTransition = FALSE;
@@ -152,7 +250,6 @@ ES_Event RunAvoid_Obstacle_RightSubHSM(ES_Event ThisEvent) {
                 break;
             }
             break;
-
 
 
         default: // all unhandled states fall into here
