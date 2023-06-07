@@ -10,7 +10,9 @@ typedef enum {
     WaitState,
     BackwardState,
     AvoidLeftState,
+    TankTurnLeft,
     AvoidRightState,
+    TankTurnRight,
 } RepositionSubHSMState_t;
 
 static const char *StateNames[] = {
@@ -19,6 +21,8 @@ static const char *StateNames[] = {
     "BackwardState",
     "AvoidLeftState",
     "AvoidRightState",
+    "TankTurnLeft",
+    "TankTurnRight",
 };
 
 static RepositionSubHSMState_t CurrentState = InitState; // <- change name to match ENUM
@@ -75,19 +79,19 @@ ES_Event RunRepositionSubHSM(ES_Event ThisEvent) {
         case BackwardState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(RELOADING_TIMER, 400);
-
+                ES_Timer_InitTimer(RELOADING_TIMER, 2500);
+                
                 if (Global_Side == LEFT_SIDE) {
-                    Bot_Foward(-BOT_MAX_SPEED, -BOT_MAX_SPEED);
+                    Bot_Foward(-84, -BOT_85_SPEED);
                 } else if (Global_Side == RIGHT_SIDE) {
-                    Bot_Foward(-97, -BOT_MAX_SPEED);
+                    Bot_Foward(-BOT_85_SPEED, -BOT_85_SPEED);
                 }
 
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == ES_TIMEOUT){
+            if (ThisEvent.EventType == ES_TIMEOUT) {
                 makeTransition = FALSE;
                 ThisEvent.EventType = FINISHED_REPOSITIONING;
             }
@@ -115,8 +119,28 @@ ES_Event RunRepositionSubHSM(ES_Event ThisEvent) {
         case AvoidLeftState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(POSITIONING_TIMER, 200);
-                Bot_Foward(BOT_HALF_SPEED, BOT_MAX_SPEED);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 100);
+                Bot_Foward(BOT_THIRD_SPEED, BOT_THIRD_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TankTurnRight;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case TankTurnRight: // in the first state, replace this with correct names
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(POSITIONING_TIMER, 150);
+                Bot_Foward(-BOT_HALF_SPEED, BOT_HALF_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -132,11 +156,31 @@ ES_Event RunRepositionSubHSM(ES_Event ThisEvent) {
             }
             break;
 
+
         case AvoidRightState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(POSITIONING_TIMER, 200);
-                Bot_Foward(BOT_MAX_SPEED, BOT_HALF_SPEED);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 100);
+                Bot_Foward(BOT_THIRD_SPEED, BOT_THIRD_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TankTurnLeft;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+        case TankTurnLeft: // in the first state, replace this with correct names
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(POSITIONING_TIMER, 150);
+                Bot_Foward(BOT_HALF_SPEED, -BOT_HALF_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();

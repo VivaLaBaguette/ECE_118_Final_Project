@@ -95,6 +95,9 @@ typedef enum {
     FINISHED_RETURNING,
 
     FINISHED_REPOSITIONING,
+    FINISHED_BACKING_UP,
+
+    FINISHED_AVOID_BACKING_UP,
 
 } ES_EventTyp_t;
 
@@ -150,6 +153,8 @@ static const char *EventNames[] = {
     "FINISHED_OBSTACLE",
     "FINISHED_BACKWARDS",
     "FINISHED_RETURNING",
+    "FINISHED_BACKING_UP",
+    "FINISHED_AVOID_BACKING_UP",
 
 };
 

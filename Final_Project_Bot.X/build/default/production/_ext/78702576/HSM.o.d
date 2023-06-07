@@ -23,8 +23,7 @@ build/default/production/_ext/78702576/HSM.o: \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Movement.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Towards_Sub.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.h \
- C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsLeft_Sub.h \
- C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsRight_Sub.h \
+ C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Backwards_Sub.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Return_Sub.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Reposition_Sub.h
 
@@ -74,9 +73,7 @@ C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Toward
 
 C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Shooting_Sub.h:
 
-C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsLeft_Sub.h:
-
-C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsRight_Sub.h:
+C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Backwards_Sub.h:
 
 C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Return_Sub.h:
 

@@ -8,8 +8,7 @@
 #include "bot_Movement.h"
 #include "Positioning_Left_Sub.h"
 #include "Positioning_Right_Sub.h"
-#include "Avoid_Obstacle_Left_Sub.h"
-#include "Avoid_Obstacle_Right_Sub.h"
+#include "Avoid_Obstacle_Sub.h"
 
 #include <stdio.h>
 
@@ -20,6 +19,8 @@ typedef enum {
     DriveFowardState,
     AvoidRightWallState,
     AvoidLeftWallState,
+    TankTurnLeft,
+    TankTurnRight,
     AvoidObstacleState,
 
 } TowardsSubHSMState_t;
@@ -31,6 +32,9 @@ static const char *StateNames[] = {
     "DriveFowardState",
     "AvoidRightWallState",
     "AvoidLeftWallState",
+    "TankTurnLeft",
+    "TankTurnRight",
+
     "AvoidObstacleState",
 };
 
@@ -145,20 +149,19 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
                 break;
             }
 
-            //if on the right side and either front left or both are tripped, there is an obstacle
-            if ((ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == RIGHT_SIDE) {
-                InitAvoid_Obstacle_RightSubHSM();
-                nextState = AvoidObstacleState;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-            }
-            //if on the left side and either front right or both are tripped, there is an obstacle
             if ((ThisEvent.EventType == FRONTRIGHT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == LEFT_SIDE) {
-                printf("\r\n asdada\r\n");
-                InitAvoid_Obstacle_LeftSubHSM();
+                InitAvoid_Obstacle_SubHSM();
                 nextState = AvoidObstacleState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if ((ThisEvent.EventType == FRONTLEFT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) && Global_Side == RIGHT_SIDE) {
+                InitAvoid_Obstacle_SubHSM();
+                nextState = AvoidObstacleState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
             }
 
             if (ThisEvent.EventType == FINISHED_NAVIGATION) { //so if towards is done and finished navigating, transition top level to shooting
@@ -174,8 +177,28 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
         case AvoidLeftWallState: //back up until both back bumpers are tripped
             if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(POSITIONING_TIMER, 700);
+                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TankTurnLeft;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+            
+        case TankTurnLeft: //back up until both back bumpers are tripped
+            if (ThisEvent.EventType == ES_ENTRY) {
                 ES_Timer_InitTimer(POSITIONING_TIMER, 150);
-                Bot_Foward(-BOT_HALF_SPEED, -BOT_MAX_SPEED);
+                Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -185,6 +208,7 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
                 nextState = DriveFowardState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
+                break;
             }
             if (ThisEvent.EventType == ES_NO_EVENT) {
                 break;
@@ -193,8 +217,28 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
         case AvoidRightWallState: //back up until both back bumpers are tripped
             if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(POSITIONING_TIMER, 700);
+                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TankTurnRight;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case TankTurnRight: //back up until both back bumpers are tripped
+            if (ThisEvent.EventType == ES_ENTRY) {
                 ES_Timer_InitTimer(POSITIONING_TIMER, 150);
-                Bot_Foward(-BOT_MAX_SPEED, -BOT_HALF_SPEED);
+                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -204,6 +248,7 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
                 nextState = DriveFowardState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
+                break;
             }
             if (ThisEvent.EventType == ES_NO_EVENT) {
                 break;
@@ -212,23 +257,21 @@ ES_Event RunTowardsSubHSM(ES_Event ThisEvent) {
 
             ///DO THIS CASE LATER, FOR AVOIDING OBSTACLES
         case AvoidObstacleState:
-            if (Global_Side == LEFT_SIDE) {
-                ThisEvent = RunAvoid_Obstacle_LeftSubHSM(ThisEvent);
-            } else if (Global_Side == RIGHT_SIDE) {
-                ThisEvent = RunAvoid_Obstacle_RightSubHSM(ThisEvent);
-            }
+            
+            ThisEvent = RunAvoid_Obstacle_SubHSM(ThisEvent);
 
             if (ThisEvent.EventType == ES_ENTRY) {
             }
 
             if (ThisEvent.EventType == ES_EXIT) {
-                InitDriveFowardSubHSM();
+                InitTowardsSubHSM();
             }
 
             if (ThisEvent.EventType == FINISHED_AVOIDING) {
-                nextState = DriveFowardState;
+                nextState = AcquireBeaconState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
+                break;
             }
             if (ThisEvent.EventType == ES_NO_EVENT) {
                 break;

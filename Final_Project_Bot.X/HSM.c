@@ -7,10 +7,10 @@
 #include "bot_Movement.h"
 #include "Towards_Sub.h"
 #include "Shooting_Sub.h"
-#include "BackwardsLeft_Sub.h"
-#include "BackwardsRight_Sub.h"
+#include "Backwards_Sub.h"
 #include "Return_Sub.h"
 #include "Reposition_Sub.h"
+
 
 #include <stdio.h>
 
@@ -78,11 +78,13 @@ ES_Event RunHSM(ES_Event ThisEvent) {
 
 
                 // now put the machine into the actual initial state
+                //                nextState = Reloading_State;
                 nextState = Reloading_State;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 ;
             }
+
 
             //RELOADING STATE JUST WAITS FOR TIMER AND MOVES ON
 
@@ -157,11 +159,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
                         break;
 
                     case FINISHED_SHOOTING: // change to finshed shooting or smthing
-                        if (Global_Side == LEFT_SIDE) {
-                            InitBackwardsLeftSubHSM();
-                        } else if (Global_Side == RIGHT_SIDE) {
-                            InitBackwardsRightSubHSM();
-                        }
+                        InitBackwardsSubHSM();
                         nextState = Drive_Backwards_State;
                         makeTransition = TRUE;
                         ThisEvent.EventType = ES_NO_EVENT;
@@ -177,12 +175,7 @@ ES_Event RunHSM(ES_Event ThisEvent) {
 
         case Drive_Backwards_State:
 
-            if (Global_Side == LEFT_SIDE) {
-                ThisEvent = RunBackwardsLeftSubHSM(ThisEvent);
-            } else if (Global_Side == RIGHT_SIDE) {
-                ThisEvent = RunBackwardsRightSubHSM(ThisEvent);
-            }
-
+            ThisEvent = RunBackwardsSubHSM(ThisEvent);
 
             if (ThisEvent.EventType != ES_NO_EVENT) {
                 switch (ThisEvent.EventType) {

@@ -87,6 +87,7 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
         case ForwardState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(ACQUIRE_TIMER, 500);
                 Bot_Foward(BOT_THIRD_SPEED, BOT_THIRD_SPEED);
             }
 
@@ -108,7 +109,7 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
                 break;
             }
 
-            if (ThisEvent.EventType == BOTH_FRONT_TRIPPED) {
+            if (ThisEvent.EventType == BOTH_FRONT_TRIPPED || ThisEvent.EventType == BOTH_FRONT_TRIPPED) {
                 nextState = BackUpState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
@@ -186,7 +187,7 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
         case TurnBackState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(ACQUIRE_TIMER, 580);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, 700);
                 Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
 
@@ -204,7 +205,7 @@ ES_Event RunPositioningLeftSubHSM(ES_Event ThisEvent) {
                 break;
             }
             break;
-            
+
         case BacktoWallState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {

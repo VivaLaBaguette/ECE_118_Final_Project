@@ -1,5 +1,5 @@
-build/default/production/_ext/78702576/BackwardsRight_Sub.o: \
- C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsRight_Sub.c \
+build/default/production/_ext/78702576/Avoid_Move_Sub.o: \
+ C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Move_Sub.c \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Framework.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Events.h \
@@ -18,9 +18,10 @@ build/default/production/_ext/78702576/BackwardsRight_Sub.o: \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_TattleTale.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BOARD.h \
- C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsRight_Sub.h \
+ C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Move_Sub.h \
  C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Movement.h \
- C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BOARD.h
+ C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BOARD.h \
+ C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Driving_Back_Sub.h
 
 C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Configure.h:
 
@@ -58,8 +59,10 @@ C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/ES_Con
 
 C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BOARD.h:
 
-C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BackwardsRight_Sub.h:
+C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Avoid_Move_Sub.h:
 
 C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/bot_Movement.h:
 
 C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/BOARD.h:
+
+C:/Users/seens/OneDrive/Desktop/ECE_118_Final_Project/Final_Project_Bot.X/Driving_Back_Sub.h:

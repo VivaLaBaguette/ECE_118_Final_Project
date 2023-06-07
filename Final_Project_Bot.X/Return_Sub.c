@@ -13,6 +13,8 @@ typedef enum {
     AvoidRightState,
     AvoidLeftState,
     Forward2State,
+    TankTurnRight,
+    TankTurnLeft,
 } ReturnSubHSMState_t;
 
 static const char *StateNames[] = {
@@ -23,6 +25,8 @@ static const char *StateNames[] = {
     "AvoidRightState",
     "AvoidLeftState",
     "Forward2State",
+    "TankTurnRight",
+    "TankTurnLeft",
 };
 
 static ReturnSubHSMState_t CurrentState = InitState; // <- change name to match ENUM
@@ -183,8 +187,28 @@ ES_Event RunReturnSubHSM(ES_Event ThisEvent) {
         case AvoidLeftState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(POSITIONING_TIMER, 200);
-                Bot_Foward(-BOT_HALF_SPEED, -BOT_MAX_SPEED);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 500);
+                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TankTurnRight;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case TankTurnRight: // in the first state, replace this with correct names
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(POSITIONING_TIMER, 150);
+                Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -203,8 +227,28 @@ ES_Event RunReturnSubHSM(ES_Event ThisEvent) {
         case AvoidRightState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(POSITIONING_TIMER, 200);
-                Bot_Foward(-BOT_MAX_SPEED, -BOT_HALF_SPEED);
+                ES_Timer_InitTimer(POSITIONING_TIMER, 500);
+                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TankTurnLeft;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+            
+        case TankTurnLeft: // in the first state, replace this with correct names
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(POSITIONING_TIMER, 150);
+                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();

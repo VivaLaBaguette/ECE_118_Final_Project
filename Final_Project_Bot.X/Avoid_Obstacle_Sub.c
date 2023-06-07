@@ -1,63 +1,61 @@
-
 #include "ES_Configure.h"
 #include "ES_Framework.h"
 #include "BOARD.h"
 #include "HSM.h"
-#include "Shooting_Sub.h"
+#include "Avoid_Obstacle_Sub.h"
 #include "bot_Movement.h"
+#include "Acquire_Sub.h"
+#include "Avoid_Move_Sub.h"
 
 typedef enum {
     InitSubState,
-    TurnTowardsWallState,
-    FowardIntoWallState,
-    RightWallState,
-    LeftWallState,
-    PressIntoState,
     BackUpState,
-    FlywheelWaitState,
-    TurnABit,
-    Detect2State,
-    AdjustLeft,
-    AdjustRight,
-    ShootState,
+    ReloadBack,
+    AvoidWallState,
+    TankTurnState,
+    BackLeftState,
+    BackRightState,
+    Flatten,
+    TinyForward,
+    TurnState,
+    ForwardState,
+    TinyBack,
 
-} ShootingSubHSMState_t;
+} Avoid_Obstacle_SubHSMState_t;
 
 static const char *StateNames[] = {
     "InitSubState",
-    "TurnTowardsWallState",
-    "FowardIntoWallState",
-    "RightWallState",
-    "LeftWallState",
-    "PressIntoState",
     "BackUpState",
-    "FlywheelWaitState",
-    "TurnABit",
-    "Detect2State",
-    "AdjustLeft",
-    "AdjustRight",
-    "ShootState",
+    "ReloadBack",
+    "AvoidWallState",
+    "TankTurnState",
+    "BackLeftState",
+    "BackRightState",
+    "Flatten",
+    "TinyForward",
+    "TurnState",
+    "ForwardState",
+    "TinyBack",
+
 };
 
-static ShootingSubHSMState_t CurrentState = InitSubState; // <- change name to match ENUM
+static Avoid_Obstacle_SubHSMState_t CurrentState = InitSubState; // <- change name to match ENUM
 static uint8_t MyPriority;
 
-
-
-uint8_t InitShootingSubHSM(void) {
+uint8_t InitAvoid_Obstacle_SubHSM(void) {
     ES_Event returnEvent;
 
     CurrentState = InitSubState;
-    returnEvent = RunShootingSubHSM(INIT_EVENT);
+    returnEvent = RunAvoid_Obstacle_SubHSM(INIT_EVENT);
     if (returnEvent.EventType == ES_NO_EVENT) {
         return TRUE;
     }
     return FALSE;
 }
 
-ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
+ES_Event RunAvoid_Obstacle_SubHSM(ES_Event ThisEvent) {
     uint8_t makeTransition = FALSE; // use to flag transition
-    ShootingSubHSMState_t nextState; // <- change type to correct enum
+    Avoid_Obstacle_SubHSMState_t nextState; // <- change type to correct enum
 
     ES_Tattle(); // trace call stack
 
@@ -65,27 +63,73 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
         case InitSubState: // If current state is initial Psedudo State
             if (ThisEvent.EventType == ES_INIT)// only respond to ES_Init
             {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 600);
-                nextState = TurnTowardsWallState;
+                InitAvoidMoveSubHSM();
+                nextState = BackUpState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
             }
             break;
 
-        case TurnTowardsWallState: // in the first state, replace this with correct names
+        case BackUpState: //go forward to goal
+
+            ThisEvent = RunAvoidMoveSubHSM(ThisEvent);
 
             if (ThisEvent.EventType == ES_ENTRY) {
+
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+
+            if (ThisEvent.EventType == BACKLEFT_TRIPPED || ThisEvent.EventType == BACKLEFT_TRIPPED || ThisEvent.EventType == BOTH_REAR_TRIPPED) {
+                nextState = AvoidWallState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+
+            if (ThisEvent.EventType == FINISHED_AVOID_BACKING_UP) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = ReloadBack;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case ReloadBack: //go forward to goal
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(BACKUP_TIMER, 2000);
+
                 if (Global_Side == LEFT_SIDE) {
-                    Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
-                } else if(Global_Side == RIGHT_SIDE){
-                    Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
+                    Bot_Foward(-80, -BOT_THIRD_SPEED);
+
+                } else if (Global_Side == RIGHT_SIDE) {
+                    Bot_Foward(-BOT_THIRD_SPEED, -80);
                 }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = FowardIntoWallState;
+
+            if (ThisEvent.EventType == BACKLEFT_TRIPPED) {
+                nextState = BackLeftState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+
+            if (ThisEvent.EventType == BACKRIGHT_TRIPPED) {
+                nextState = BackRightState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == BOTH_REAR_TRIPPED || ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = Flatten;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -95,50 +139,17 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case FowardIntoWallState:
+        case AvoidWallState: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 300);
-                Bot_Foward(BOT_THIRD_SPEED, BOT_THIRD_SPEED);
-            }
-            if (ThisEvent.EventType == ES_EXIT) {
-                Bot_Stop();
-                //                ES_Timer_InitTimer(SHOOTING_TIMER, 150);
+                ES_Timer_InitTimer(BACKUP_TIMER, 600);
+                Bot_Foward(BOT_SIX_SPEED, BOT_SIX_SPEED);
 
-            }
-            if (ThisEvent.EventType == FRONTLEFT_TRIPPED) {
-                nextState = LeftWallState;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == FRONTRIGHT_TRIPPED) {
-                nextState = RightWallState;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == BOTH_FRONT_TRIPPED || ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = PressIntoState;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == ES_NO_EVENT) {
-                break;
-            }
-            break;
-
-        case LeftWallState: // in the first state, replace this with correct names
-            //think about timing here
-            if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 200);
-                Bot_Foward(-BOT_THIRD_SPEED, BOT_HALF_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
             if (ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = PressIntoState;
+                nextState = TankTurnState;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -148,30 +159,15 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case RightWallState: // in the first state, replace this with correct names
-            //think about timing here
+        case TankTurnState: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 200);
-                Bot_Foward(BOT_HALF_SPEED, -BOT_THIRD_SPEED);
-            }
-            if (ThisEvent.EventType == ES_EXIT) {
-                Bot_Stop();
-            }
-            if (ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = PressIntoState;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == ES_NO_EVENT) {
-                break;
-            }
-            break;
-        case PressIntoState: // in the first state, replace this with correct names
-            //think about timing here
-            if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 500);
-                Bot_Foward(BOT_HALF_SPEED, BOT_HALF_SPEED);
+                ES_Timer_InitTimer(BACKUP_TIMER, 100);
+                if (Global_Side == LEFT_SIDE) {
+                    Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
+                } else if (Global_Side == RIGHT_SIDE) {
+                    Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
+                }
+
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
@@ -187,18 +183,17 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case BackUpState: // in the first state, replace this with correct names
-            //think about timing here
+        case BackLeftState: //go forward to goal
+
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 400);
-                Bot_Foward(-BOT_SIX_SPEED, -BOT_SIX_SPEED);
-                Bot_Flywheel(BOT_FLYWHEEL_SPEED);
+                ES_Timer_InitTimer(AVOID_TIMER, 300);
+                Bot_Foward(BOT_HALF_SPEED, -BOT_HALF_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = FlywheelWaitState;
+            if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = Flatten;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -208,14 +203,17 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case FlywheelWaitState:
+        case BackRightState: //go forward to goal
+
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 100);
+                ES_Timer_InitTimer(AVOID_TIMER, 300);
+                Bot_Foward(-BOT_HALF_SPEED, BOT_HALF_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
             }
-            if (ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = Detect2State;
+            if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = Flatten;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -225,25 +223,88 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case Detect2State: // in the first state, replace this with correct names
-            //think about timing here
+        case Flatten: //go forward to goal
+
             if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(AVOID_TIMER, 800);
+                Bot_Foward(-BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = TinyForward;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case TinyForward: //go forward to goal
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(AVOID_TIMER, 200);
+                Bot_Foward(BOT_SIX_SPEED, BOT_SIX_SPEED);
+            }
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
+            if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = TurnState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+
+        case TurnState: //turn 90 degrees away from left side
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(AVOID_TIMER, 800);
                 if (Global_Side == LEFT_SIDE) {
-                    Bot_Foward(BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
-                } else if (Global_Side == RIGHT_SIDE){
-                    Bot_Foward(-BOT_THIRD_SPEED, BOT_THIRD_SPEED);
+                    Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
+                } else if (Global_Side == RIGHT_SIDE) {
+                    Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
                 }
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
-            if (ThisEvent.EventType == DETECTED_CLOSE_2KHZ) {
+            if (ThisEvent.EventType == ES_TIMEOUT) { //so if towards is done and finished navigating, transition top level to shooting
+                nextState = ForwardState;
+                makeTransition = TRUE;
+                ThisEvent.EventType = ES_NO_EVENT;
+                break;
+            }
+            if (ThisEvent.EventType == ES_NO_EVENT) {
+                break;
+            }
+            break;
+
+        case ForwardState: //go forward to goal
+
+            if (ThisEvent.EventType == ES_ENTRY) {
+                ES_Timer_InitTimer(AVOID_TIMER, 5000);
                 if (Global_Side == LEFT_SIDE) {
-                    nextState = AdjustLeft;
-                } else if (Global_Side == RIGHT_SIDE){
-                    nextState = AdjustRight;
+                    Bot_Foward(BOT_THIRD_SPEED, 77);
+                } else if (Global_Side == RIGHT_SIDE) {
+                    Bot_Foward(76, BOT_THIRD_SPEED);
                 }
+            }
+            
+            if (ThisEvent.EventType == ES_EXIT) {
+                Bot_Stop();
+            }
 
+            if (ThisEvent.EventType == BOTH_FRONT_TRIPPED || ThisEvent.EventType == ES_TIMEOUT) {
+                nextState = TinyBack;
                 makeTransition = TRUE;
                 ThisEvent.EventType = ES_NO_EVENT;
                 break;
@@ -253,67 +314,25 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
             }
             break;
 
-        case AdjustLeft: // in the first state, replace this with correct names
-            //think about timing here
+        case TinyBack: // in the first state, replace this with correct names
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 12); //try 10 if it doesnt work
-                Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
+                ES_Timer_InitTimer(BACKUP_TIMER, 200);
+                Bot_Foward(-BOT_THIRD_SPEED, -BOT_THIRD_SPEED);
             }
             if (ThisEvent.EventType == ES_EXIT) {
                 Bot_Stop();
             }
             if (ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = ShootState;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == ES_NO_EVENT) {
-                break;
-            }
-            break;
-
-        case AdjustRight: // in the first state, replace this with correct names
-            //think about timing here
-            if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, 90);
-                Bot_Foward(BOT_SIX_SPEED, -BOT_SIX_SPEED);
-            }
-            if (ThisEvent.EventType == ES_EXIT) {
-                Bot_Stop();
-            }
-            if (ThisEvent.EventType == ES_TIMEOUT) {
-                nextState = ShootState;
-                makeTransition = TRUE;
-                ThisEvent.EventType = ES_NO_EVENT;
-                break;
-            }
-            if (ThisEvent.EventType == ES_NO_EVENT) {
-                break;
-            }
-            break;
-
-
-        case ShootState: // in the first state, replace this with correct names
-            if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(SHOOTING_TIMER, TIMER_SHOOTING_TICK);
-                Bot_Loader(BOT_LOADER_SPEED);
-            }
-            if (ThisEvent.EventType == ES_EXIT) {
-                Bot_Stop();
-                Bot_Flywheel(0);
-                Bot_Loader(0);
-            }
-
-            if (ThisEvent.EventType == ES_TIMEOUT) {
+                Global_Side = !Global_Side;
                 makeTransition = FALSE;
-                ThisEvent.EventType = FINISHED_SHOOTING;
+                ThisEvent.EventType = FINISHED_AVOIDING;
                 break;
             }
             if (ThisEvent.EventType == ES_NO_EVENT) {
                 break;
             }
             break;
+
 
         default: // all unhandled states fall into here
             break;
@@ -321,9 +340,9 @@ ES_Event RunShootingSubHSM(ES_Event ThisEvent) {
 
     if (makeTransition == TRUE) { // making a state transition, send EXIT and ENTRY
         // recursively call the current state with an exit event
-        RunShootingSubHSM(EXIT_EVENT); // <- rename to your own Run function
+        RunAvoid_Obstacle_SubHSM(EXIT_EVENT); // <- rename to your own Run function
         CurrentState = nextState;
-        RunShootingSubHSM(ENTRY_EVENT); // <- rename to your own Run function
+        RunAvoid_Obstacle_SubHSM(ENTRY_EVENT); // <- rename to your own Run function
     }
 
     ES_Tail(); // trace call stack end

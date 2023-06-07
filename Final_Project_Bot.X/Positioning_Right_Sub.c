@@ -186,7 +186,7 @@ ES_Event RunPositioningRightSubHSM(ES_Event ThisEvent) {
         case TurnBackState: // in the first state, replace this with correct names
 
             if (ThisEvent.EventType == ES_ENTRY) {
-                ES_Timer_InitTimer(ACQUIRE_TIMER, 580);
+                ES_Timer_InitTimer(ACQUIRE_TIMER, 700);
                 Bot_Foward(-BOT_SIX_SPEED, BOT_SIX_SPEED);
             }
 
